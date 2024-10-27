@@ -18,7 +18,7 @@ class LoadingWidget extends StatelessWidget {
           ? CircularProgressIndicator(
              color: color ?? AppColors.white,
               strokeWidth: wi(2.5),
-              backgroundColor: AppColors.black.withOpacity(.1),)
+              backgroundColor: AppColors.primaryColor.withOpacity(.7),)
           : CupertinoActivityIndicator(color: color ?? AppColors.white),
     );
   }

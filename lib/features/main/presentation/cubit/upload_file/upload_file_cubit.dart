@@ -44,4 +44,14 @@ class UploadFileCubit extends Cubit<UploadFileState> {
       emit(UploadFileFailure(ServerFailure(500)));
     }
   }
+
+
+  @override
+  Future<void> close() {
+
+      emit(UploadFileInitial());
+    // }
+
+    return super.close();
+  }
 }

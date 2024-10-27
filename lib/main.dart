@@ -13,11 +13,10 @@ import 'package:stu_teach/di.dart';
 import 'package:stu_teach/features/auth/presentation/cubit/auth/auth_cubit.dart';
 import 'package:stu_teach/features/auth/presentation/cubit/maintab/main_tab_cubit.dart';
 import 'package:stu_teach/core/services/firebase/firebase_options.dart';
+import 'package:stu_teach/features/main/presentation/cubit/task/task_cubit.dart';
 import 'package:stu_teach/features/main/presentation/cubit/upload_file/upload_file_cubit.dart';
 
-
 Future<void> main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -35,20 +34,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     SizeConfig().init(context);
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => inject<MainTabCubit>()),
-
+        BlocProvider(create: (context) => inject<AuthCubit>()),
         BlocProvider(
-            create: (context) => inject<AuthCubit>()),
-
-        BlocProvider(
-            create: (context) => inject<UploadFileCubit>()),
-
+          create: (context) => inject<TeacherTaskCubit>()..fetchAllTasks(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
