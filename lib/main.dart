@@ -10,18 +10,17 @@ import 'package:stu_teach/core/utils/helper_widget.dart';
 import 'package:stu_teach/core/utils/size_config.dart';
 import 'package:stu_teach/core/values/app_theme.dart';
 import 'package:stu_teach/di.dart';
-import 'package:stu_teach/features/common/cubit/maintab/main_tab_cubit.dart';
+import 'package:stu_teach/features/auth/presentation/cubit/auth/auth_cubit.dart';
+import 'package:stu_teach/features/auth/presentation/cubit/maintab/main_tab_cubit.dart';
 import 'package:stu_teach/core/services/firebase/firebase_options.dart';
-
-import 'features/common/cubit/auth/auth_cubit.dart';
 
 
 Future<void> main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  WidgetsFlutterBinding.ensureInitialized();
-
   await CheckConnection.scheduleRequest();
   await AppUpdateService.getCloudVersion();
   // Initialize dependencies
@@ -35,6 +34,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     SizeConfig().init(context);
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
@@ -42,16 +42,14 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => inject<MainTabCubit>()),
 
-
         BlocProvider(
             create: (context) => inject<AuthCubit>()),
 
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'TMA mobile',
+        title: 'Stu Teach',
         theme: appTheme,
-
         onGenerateRoute: RouteGenerate().generate,
         navigatorKey: navigatorKey,
         builder: (context, child) {

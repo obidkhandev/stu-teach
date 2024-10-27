@@ -60,7 +60,7 @@ class UnAuthorizationFailure extends Failure {
 
   @override
   String getLocalizedMessage(BuildContext context) =>
-      "Un Authorization Failure";
+      "Un Authorization User";
 }
 
 
@@ -82,13 +82,13 @@ class UserNotFound extends Failure {
   const UserNotFound() : super();
 
   @override
-  String getLocalizedMessage(BuildContext context) => "strUserNotfound";
+  String getLocalizedMessage(BuildContext context) => "User not found";
 }
 
 class WrongCodeFailure extends Failure {
   const WrongCodeFailure() : super();
 
   @override
-  String getLocalizedMessage(BuildContext context) => "strWrongCode";
+  String getLocalizedMessage(BuildContext context) => "Wrong Code";
 }
 

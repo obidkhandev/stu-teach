@@ -24,6 +24,7 @@ class AppIcons {
   static const String icLine6 = 'assets/icons/line6.svg';
   static const String icLine7 = 'assets/icons/line7.svg';
   static const String icLine8 = 'assets/icons/line8.svg';
+  static const String icError = 'assets/icons/ic_error.svg';
   // static const String icFlash = 'assets/icons/ic_menu.svg';
 
 }
