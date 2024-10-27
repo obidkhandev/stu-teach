@@ -15,16 +15,11 @@ class AppIcons {
   static const String icRocket = 'assets/icons/ic_rocket.svg';
   static const String icMedal = 'assets/icons/ic_competition.svg';
   static const String icProfile = 'assets/icons/ic_person.svg';
-  static const String icMenu = 'assets/icons/ic_menu.svg';
-  static const String icLine1 = 'assets/icons/line1.svg';
-  static const String icLine2 = 'assets/icons/line2.svg';
-  static const String icLine3 = 'assets/icons/line3.svg';
-  static const String icLine4 = 'assets/icons/line4.svg';
-  static const String icLine5 = 'assets/icons/line5.svg';
-  static const String icLine6 = 'assets/icons/line6.svg';
-  static const String icLine7 = 'assets/icons/line7.svg';
-  static const String icLine8 = 'assets/icons/line8.svg';
+  static const String icMenu = 'assets/icons/menu-vertical.svg';
+
   static const String icError = 'assets/icons/ic_error.svg';
+  static const String icEdit = 'assets/icons/edit-edit-3.svg';
+  static const String icDelete = 'assets/icons/delete-delete.svg';
   // static const String icFlash = 'assets/icons/ic_menu.svg';
 
 }

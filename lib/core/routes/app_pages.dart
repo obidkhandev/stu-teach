@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:stu_teach/core/routes/app_routes.dart';
 import 'package:stu_teach/features/auth/presentation/pages/login/login_screen.dart';
+import 'package:stu_teach/features/main/presentation/pages/main_screen.dart';
 import 'package:stu_teach/features/no_internet/no_inernet_screen.dart';
 import 'package:stu_teach/features/onboarding/onboarding/pages/on_boarding_screen.dart';
 import 'package:stu_teach/features/onboarding/splash/splash_screen.dart';
-
 
 class RouteGenerate {
   Route? generate(RouteSettings settings) {
@@ -20,7 +20,8 @@ class RouteGenerate {
         return simpleRoute(const NoInternetScreen());
       case AppRoutes.login:
         return simpleRoute(const LoginScreen());
-
+      case AppRoutes.mainScreen:
+        return simpleRoute(const MainScreen());
     }
     return null;
   }

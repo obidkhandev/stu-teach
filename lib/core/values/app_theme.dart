@@ -7,6 +7,7 @@ import 'package:stu_teach/core/values/app_colors.dart';
 
 
 final appTheme = ThemeData(
+
   brightness: Brightness.light,
   colorScheme: ColorScheme.fromSwatch().copyWith(
     secondary: AppColors.primaryColor,

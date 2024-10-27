@@ -13,6 +13,7 @@ import 'package:stu_teach/di.dart';
 import 'package:stu_teach/features/auth/presentation/cubit/auth/auth_cubit.dart';
 import 'package:stu_teach/features/auth/presentation/cubit/maintab/main_tab_cubit.dart';
 import 'package:stu_teach/core/services/firebase/firebase_options.dart';
+import 'package:stu_teach/features/main/presentation/cubit/upload_file/upload_file_cubit.dart';
 
 
 Future<void> main() async {
@@ -45,6 +46,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
             create: (context) => inject<AuthCubit>()),
 
+        BlocProvider(
+            create: (context) => inject<UploadFileCubit>()),
+
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -55,7 +59,7 @@ class MyApp extends StatelessWidget {
         builder: (context, child) {
           return ScrollConfiguration(behavior: MyBehavior(), child: child!);
         },
-        initialRoute: AppRoutes.splashScreen,
+        initialRoute: AppRoutes.mainScreen,
       ),
     );
   }

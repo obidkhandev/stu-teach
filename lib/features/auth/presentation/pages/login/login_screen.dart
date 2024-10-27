@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
         listener: (context, state) {
           // Navigate to onboarding on successful login
           if (state is AuthenticatedState) {
-            Navigator.pushNamedAndRemoveUntil(context, AppRoutes.onBoarding, (route) => false);
+            Navigator.pushNamedAndRemoveUntil(context, AppRoutes.mainScreen, (route) => false);
           }
 
           // Show error message if there's an error

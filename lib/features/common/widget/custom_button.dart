@@ -5,8 +5,6 @@ import 'package:stu_teach/core/utils/size_config.dart';
 import 'package:stu_teach/core/values/app_colors.dart';
 import 'package:stu_teach/features/common/widget/loading_widget.dart';
 
-
-
 class CustomButton extends StatelessWidget {
   const CustomButton({
     super.key,
@@ -55,17 +53,16 @@ class CustomButton extends StatelessWidget {
         // highlightColor: AppColors.transparent,
         hoverColor: AppColors.transparent,
         borderRadius: radius ?? BorderRadius.circular(10),
-        onTap: onTap,
+        onTap: isLoading ? () {} : onTap,
         child: Ink(
           height: height ?? he(50),
           padding: EdgeInsets.symmetric(
               vertical: isLoading ? he(8) : paddingV ?? he(10),
               horizontal: wi(8)),
           decoration: BoxDecoration(
-              borderRadius: radius ?? BorderRadius.circular(10),
-              border: Border.all(color: borderColor ?? AppColors.transparent),
-              color: bgColor ?? AppColors.primaryColor,
-
+            borderRadius: radius ?? BorderRadius.circular(10),
+            border: Border.all(color: borderColor ?? AppColors.transparent),
+            color: bgColor ?? AppColors.primaryColor,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

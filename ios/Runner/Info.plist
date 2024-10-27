@@ -28,6 +28,15 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>This app requires access to your photo library to select files.</string>
+
+    <key>NSDocumentsUsageDescription</key>
+    <string>This app requires access to your documents to upload files.</string>
+
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>This app requires permission to save files to your photo library.</string>
+
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
