@@ -1,0 +1,129 @@
+name: stu_teach
+description: "A new Flutter project."
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.3
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Default Cupertino icons used in Flutter applications
+  cupertino_icons: ^1.0.8
+
+  # For using SVG icons in your app
+  flutter_svg: ^2.0.10+1
+
+  # State management package using BLoC (Business Logic Component) pattern
+  flutter_bloc: ^8.1.6
+
+  # Lightweight package to simplify working with equality in Dart objects
+  equatable: ^2.0.5
+
+  # Dependency injection package for managing instances
+  get_it: ^8.0.1
+
+  # Functional programming package for handling Option, Either, etc.
+  dartz: ^0.10.1
+
+  # HTTP client for making API requests
+  dio: ^5.7.0
+
+  # For persisting small key-value data locally
+  shared_preferences: ^2.3.2
+
+  # For shimmer loading effects (useful for loading indicators)
+  shimmer: ^3.0.0
+
+  # For masking user input in `TextFormField` (e.g., phone number formatting)
+  mask_text_input_formatter: ^2.9.0
+
+  # Internationalization and localization support
+  intl: ^0.19.0
+
+  # Package for simple and beautiful animations
+  animate_do: ^3.0.2
+
+  # For creating image carousels/sliders
+  carousel_slider: ^5.0.0
+
+  # For caching and loading network images efficiently
+  cached_network_image: ^3.4.1
+
+  # Provides animated buttons with scaling effects
+  scale_button: ^2.1.2
+
+  # For managing permissions like location, camera, etc.
+  permission_handler: ^11.3.1
+
+  # For creating expandable bottom sheets
+  expandable_bottom_sheet: ^1.1.1+1
+
+  # For displaying circular and linear progress indicators
+  percent_indicator: ^4.2.3
+
+  # For page indicators (useful for onboarding or pagination)
+  smooth_page_indicator: ^1.2.0+3
+
+  # For sharing content (e.g., share text, images) across different platforms
+  share_plus: ^10.0.2
+
+  # For launching URLs and handling deep links
+  url_launcher: ^6.3.0
+
+  # For checking and monitoring internet connectivity
+  connectivity_plus: ^5.0.2
+
+  # For adding story-like features similar to Instagram/Facebook stories
+  story: ^1.1.0
+
+  # To query application information like version, package name, etc.
+  package_info_plus: ^8.1.0
+
+  pinput: ^4.0.0
+  flutter_constraintlayout: ^1.7.0-stable
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+  flutter_lints: ^4.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  # Assets used in the project (images, icons, fonts, etc.)
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/fonts/
+
+  # Custom fonts used in the project
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/inter/Inter-Black.ttf
+          weight: 900
+        - asset: assets/fonts/inter/Inter-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/inter/Inter-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/inter/Inter-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/inter/Inter-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/inter/Inter-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/inter/Inter-Light.ttf
+          weight: 300
+        - asset: assets/fonts/inter/Inter-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/inter/Inter-Thin.ttf
+          weight: 100
