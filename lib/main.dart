@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,11 +11,15 @@ import 'package:stu_teach/core/utils/size_config.dart';
 import 'package:stu_teach/core/values/app_theme.dart';
 import 'package:stu_teach/di.dart';
 import 'package:stu_teach/features/common/cubit/maintab/main_tab_cubit.dart';
+import 'package:stu_teach/core/services/firebase/firebase_options.dart';
 
 import 'features/common/cubit/auth/auth_cubit.dart';
 
 
 Future<void> main() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   WidgetsFlutterBinding.ensureInitialized();
 
   await CheckConnection.scheduleRequest();
