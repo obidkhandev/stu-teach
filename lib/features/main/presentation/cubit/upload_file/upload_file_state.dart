@@ -17,8 +17,8 @@ class UploadFileLoading extends UploadFileState {
 
 class UploadFileSuccess extends UploadFileState {
   final String url;
-
-  UploadFileSuccess(this.url);
+  final String fileType;
+  UploadFileSuccess(this.url, this.fileType);
 
   @override
   List<Object> get props => [url];

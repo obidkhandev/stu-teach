@@ -25,14 +25,18 @@ class UploadFileCubit extends Cubit<UploadFileState> {
       if (result != null && result.files.single.path != null) {
         // User selected a file, now proceed to upload
         File file = File(result.files.single.path!);
+        print( "\n\n\n\n\n ---: ${file.path} :File path selected---\n\n\n\n\n");
+        String urlType =  openUrl(file.path);
         emit(UploadFileLoading());
+
 
         final Either<Failure, String> uploadResult =
             await uploadFileUseCase(UploadFileParams(file));
 
+
         uploadResult.fold(
           (failure) => emit(UploadFileFailure(failure)),
-          (url) => emit(UploadFileSuccess(url)),
+          (url) => emit(UploadFileSuccess(url,urlType)),
         );
       } else {
         // User canceled the picker or an error occurred
@@ -46,8 +50,26 @@ class UploadFileCubit extends Cubit<UploadFileState> {
   }
 
 
-  void setUrl(String url){
-    emit(UploadFileSuccess(url));
+  String openUrl(String url) {
+    final extension = url.split('.').last.toLowerCase();
+
+    if (extension == 'pdf') {
+      return 'pdf';
+    } else if (extension == 'doc' || extension == 'docx') {
+      return 'doc';
+    } else if (extension == 'mp4' || extension == 'mov') {
+      return 'mp4';
+    } else if (extension == 'jpg' || extension == 'jpeg' || extension == 'png') {
+      return 'png';
+    } else if (extension == 'mp3' || extension == 'wav') {
+      return 'mp3';
+    } else {
+      return "Unknown";
+    }
+  }
+
+  void setUrl(String url,String type) {
+    emit(UploadFileSuccess(url,type));
   }
 
   void reset(){

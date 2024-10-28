@@ -111,4 +111,5 @@ void _cubit() {
   // Upload file
   inject.registerFactory(() => TeacherTaskCubit(inject(),inject(),inject(),inject()));
 
+
 }

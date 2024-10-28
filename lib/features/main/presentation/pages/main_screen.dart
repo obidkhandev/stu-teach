@@ -11,6 +11,7 @@ import 'package:stu_teach/features/main/presentation/cubit/task/task_cubit.dart'
 import 'package:stu_teach/features/main/presentation/cubit/upload_file/upload_file_cubit.dart';
 import 'package:stu_teach/features/main/presentation/pages/part/add_task_dialog.dart';
 import 'package:stu_teach/features/main/presentation/pages/part/edit_tasks.dart';
+import 'package:stu_teach/features/main/presentation/pages/widget/file_type_widget.dart';
 import 'package:stu_teach/features/main/presentation/pages/widget/teacher_task_item.dart';
 
 class MainScreen extends StatefulWidget {
@@ -42,37 +43,55 @@ class _MainScreenState extends State<MainScreen> {
         builder: (context, state) {
           final bloc = context.read<TeacherTaskCubit>();
           if (state is TeacherTaskLoaded) {
-            return ListView.separated(
-              itemCount: state.tasks.length,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return TeacherTaskItem(
-                  model: state.tasks[index],
-                  onDelete: () async {
-                    await bloc.deleteTask(state.tasks[index].id);
-                    await bloc.fetchAllTasks();
-                  },
-                  onEdit: () async {
-                    context.read<UploadFileCubit>().setUrl(state.tasks[index].fileUrl);
+            return Column(
+              children: [
+                ListView.separated(
+                  itemCount: state.tasks.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return TeacherTaskItem(
+                      model: state.tasks[index],
+                      onDelete: () async {
+                        await bloc.deleteTask(state.tasks[index].id);
+                        await bloc.fetchAllTasks();
+                      },
+                      onEdit: () async {
+                        context
+                            .read<UploadFileCubit>()
+                            .setUrl(state.tasks[index].fileUrl,state.tasks[index].urlType);
 
-                    showModalBottomSheet(context: context, builder: (context){
-                      return EditTaskDialog(model: state.tasks[index]);
-                    });
-
+                        showModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return EditTaskDialog(model: state.tasks[index]);
+                            });
+                      },
+                      onSee: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => FileTypeWidget(
+                              url: state.tasks[index].fileUrl, type: state.tasks[index].urlType,
+                            ),
+                          ),
+                        );
+                      },
+                    );
                   },
-                  onSee: () {},
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return customDivider;
-              },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return customDivider;
+                  },
+                ),
+              ],
             );
           } else if (state is TeacherTaskLoading) {
             return const LoadingWidget();
           } else if (state is TeacherTaskError) {
-            return CustomButton(text: "Try again", onTap: () async {
-              await bloc.fetchAllTasks();
-            });
+            return CustomButton(
+                text: "Try again",
+                onTap: () async {
+                  await bloc.fetchAllTasks();
+                });
           } else {
             return const SizedBox.shrink();
           }

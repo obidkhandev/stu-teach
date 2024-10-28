@@ -27,6 +27,8 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
 
   DateTime? selectedDate;
   String fileUrl = '';
+  String fileType = '';
+
 
   @override
   void initState() {
@@ -34,7 +36,7 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
     _tarifController = TextEditingController(text: widget.model.tarif);
     selectedDate = DateTime.parse(widget.model.date);
     fileUrl = widget.model.fileUrl;
-
+    fileType = widget.model.urlType;
     super.initState();
   }
 
@@ -66,7 +68,7 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
       child: BlocConsumer<UploadFileCubit, UploadFileState>(
         listener: (context, fileState) {
           if(fileState is UploadFileInitial){
-            context.read<UploadFileCubit>().setUrl(fileUrl);
+            context.read<UploadFileCubit>().setUrl(fileUrl,widget.model.urlType);
           }
           if (fileState is UploadFileSuccess) {
             debugPrint('File uploaded successfully: ${fileState.url}');
@@ -169,7 +171,7 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
                                   : '',
                               id: '',
                               finishedCount:
-                              0, // Include uploaded file URL if available
+                              0, fileType: fileType, // Include uploaded file URL if available
                             );
 
                             // Access TaskCubit

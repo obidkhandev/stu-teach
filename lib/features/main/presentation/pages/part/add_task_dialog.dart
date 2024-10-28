@@ -45,6 +45,9 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
     }
   }
 
+  String fileUrl  = '';
+  String fileType  = '';
+
   @override
   Widget build(BuildContext context) {
     return FadeInUp(
@@ -52,6 +55,8 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
       child: BlocConsumer<UploadFileCubit, UploadFileState>(
         listener: (context, fileState) {
           if (fileState is UploadFileSuccess) {
+            fileUrl = fileState.url;
+            fileType = fileState.fileType;
             debugPrint('File uploaded successfully: ${fileState.url}');
           } else if (fileState is UploadFileFailure) {
             debugPrint('Upload failed: ${fileState.failure}');
@@ -133,8 +138,9 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                         if (_formKey.currentState?.validate() == true) {
                           if (selectedDate == null) {
                             customToast(
-                                message: "Please select a date",
-                                bgColor: Colors.red);
+                              message: "Please select a date",
+                              bgColor: Colors.red,
+                            );
                           } else {
                             if (fileState is UploadFileInitial) {
                               await fileBloc.selectAndUploadFile();
@@ -146,38 +152,32 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                               tarif: _tarifController.text.trim(),
                               date: selectedDate!.toIso8601String(),
                               userIds: [],
-                              // Assuming you want to send date as a string
-                              fileUrl: fileState is UploadFileSuccess
-                                  ? fileState.url
-                                  : '',
+                              fileUrl: fileUrl,
                               id: '',
-                              finishedCount:
-                                  0, // Include uploaded file URL if available
+                              finishedCount: 0, fileType: fileType,
                             );
 
                             // Access TaskCubit
-                            final taskCubit =
-                                BlocProvider.of<TeacherTaskCubit>(context);
+                            final taskCubit = BlocProvider.of<TeacherTaskCubit>(context);
 
                             // Add task using TaskCubit
                             await taskCubit.addTask(taskRequest);
 
-                            // You can also listen to the state and show a success or failure message if needed
+                            // Listen to the state and show a success or failure message
                             taskCubit.stream.listen((state) async {
                               if (state is TeacherTaskAdded) {
                                 fileBloc.reset();
                                 await taskCubit.fetchAllTasks();
 
                                 customToast(
-                                    message: "Task added successfully",
-                                    bgColor: AppColors.primaryColor);
+                                  message: "Task added successfully",
+                                  bgColor: AppColors.primaryColor,
+                                );
 
-                                Navigator.of(context)
-                                    .pop(); // Close the dialog
+                                Navigator.of(context).pop(); // Close the dialog
                               } else if (state is TeacherTaskError) {
                                 customToast(
-                                  message:
-                                      "Failed to add task: ${state.failure}",
+                                  message: "Failed to add task: ${state.failure}",
                                   bgColor: Colors.red,
                                 );
                               }

@@ -4,6 +4,8 @@ class TaskResponse {
   final String date;
   final String fileUrl;
   final String tarif;
+  final String urlType;
+
 
   final int finishedCount;
   final List<String> userIds;
@@ -16,6 +18,7 @@ class TaskResponse {
     required this.finishedCount,
     required this.userIds,
     required this.tarif,
+    required this.urlType,
   });
 
   factory TaskResponse.fromJson(Map<String, dynamic> json) {
@@ -27,6 +30,7 @@ class TaskResponse {
       finishedCount: json['finishedCount'] as int,
       userIds: List<String>.from(json['userIds'] as List),
       tarif: json['tarif'] as String,
+      urlType: json['fileType'] as String,
     );
   }
 }
