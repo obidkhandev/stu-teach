@@ -5,13 +5,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stu_teach/core/api/dio_client.dart';
 import 'package:stu_teach/core/utils/pref_manager.dart';
 import 'package:stu_teach/features/auth/data/datasourse/auth_datasourse.dart';
+import 'package:stu_teach/features/auth/data/datasourse/student_datasources.dart';
 import 'package:stu_teach/features/auth/data/repository/auth.dart';
+import 'package:stu_teach/features/auth/data/repository/student.dart';
 import 'package:stu_teach/features/auth/domain/repository/auth.dart';
+import 'package:stu_teach/features/auth/domain/repository/student.dart';
 import 'package:stu_teach/features/auth/domain/uscase/auth/check_user_auth.dart';
 import 'package:stu_teach/features/auth/domain/uscase/auth/login_user_usecase.dart';
 import 'package:stu_teach/features/auth/domain/uscase/auth/logout.dart';
 import 'package:stu_teach/features/auth/domain/uscase/auth/register_user_usecase.dart';
+import 'package:stu_teach/features/auth/domain/uscase/student/add_student_usecase.dart';
+import 'package:stu_teach/features/auth/domain/uscase/student/get_student_usecase.dart';
 import 'package:stu_teach/features/auth/presentation/cubit/auth/auth_cubit.dart';
+import 'package:stu_teach/features/auth/presentation/cubit/student/student_cubit.dart';
 import 'package:stu_teach/features/main/data/datasources/teacher_task_datasources.dart';
 import 'package:stu_teach/features/main/data/datasources/upload_file_datasourse.dart';
 import 'package:stu_teach/features/main/data/repositories/teacher_tasks_repositories_impl.dart';
@@ -31,6 +37,7 @@ final inject = GetIt.instance;
 Future<void> initDi() async {
   // Register SharedPreferences
   final SharedPreferences pref = await SharedPreferences.getInstance();
+
   inject.registerSingleton<SharedPreferences>(pref);
 
   // Register other dependencies
@@ -55,6 +62,9 @@ void _repositories() {
   // Upload File And Task
   inject.registerLazySingleton<TeacherTaskRepositories>(
       () => TeacherTasksRepositoriesImpl(inject(), inject()));
+
+  inject.registerLazySingleton<StudentRepository>(
+      () => StudentRepositoryImpl(inject()));
 }
 
 void _dataSources() {
@@ -68,6 +78,10 @@ void _dataSources() {
 
   inject.registerLazySingleton<TeacherTaskDatasource>(
     () => TeacherTaskDatasourceImpl(FirebaseFirestore.instance),
+  );
+
+  inject.registerLazySingleton<StudentDatasource>(
+    () => StudentDatasourceImpl(inject(),FirebaseFirestore.instance, ),
   );
 }
 
@@ -86,6 +100,9 @@ void _useCase() {
   inject.registerLazySingleton(() => GetAllTasksUseCase(inject()));
   inject.registerLazySingleton(() => EditTaskUseCase(inject()));
   inject.registerLazySingleton(() => DeleteTaskUseCase(inject()));
+
+  inject.registerLazySingleton(() => GetStudentUsecase(inject()));
+  inject.registerLazySingleton(() => AddStudentUsecase(inject()));
 }
 
 void _cubit() {
@@ -102,6 +119,9 @@ void _cubit() {
 
   // Upload file
   inject.registerFactory(() => UploadFileCubit(inject()));
+
+  inject.registerFactory(() =>
+      StudentCubit(addStudentUseCase: inject(), getStudentUseCase: inject()));
 
   // Upload file
   inject.registerFactory(

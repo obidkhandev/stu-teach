@@ -4,8 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stu_teach/core/routes/app_routes.dart';
 import 'package:stu_teach/core/utils/size_config.dart';
 import 'package:stu_teach/core/values/app_assets.dart';
+import 'package:stu_teach/features/auth/data/models/student/stundent_model.dart';
 import 'package:stu_teach/features/auth/presentation/cubit/auth/auth_cubit.dart';
 import 'package:stu_teach/features/auth/presentation/cubit/auth/auth_state.dart';
+import 'package:stu_teach/features/auth/presentation/cubit/student/student_cubit.dart';
 import 'package:stu_teach/features/auth/presentation/pages/login/part/custom_dialog.dart';
 import 'package:stu_teach/features/common/widget/custom_button.dart';
 import 'package:stu_teach/features/common/widget/text_field_widget.dart';
@@ -25,10 +27,18 @@ studentRegisterBottomSheet({required BuildContext context}) {
       return BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthenticatedState) {
-            Navigator.pushNamedAndRemoveUntil(context, AppRoutes.studentMainScreen, (route) => false);
+            final student = StudentModel(
+                id: '',
+                name: nameController.text,
+                email: emailController.text,
+                password: passwordController.text);
+            context.read<StudentCubit>().addStudent(student);
+            Navigator.pushNamedAndRemoveUntil(
+                context, AppRoutes.studentMainScreen, (route) => false);
           }
           if (state is AuthErrorState) {
-            customDialog(context, 'Try again or check Internet', state.message, AppIcons.icError);
+            customDialog(context, 'Try again or check Internet', state.message,
+                AppIcons.icError);
           }
         },
         builder: (context, state) {
@@ -37,7 +47,8 @@ studentRegisterBottomSheet({required BuildContext context}) {
             child: Form(
               key: _formKey, // Attach form key
               child: SingleChildScrollView(
-                padding:  EdgeInsets.symmetric(horizontal: 20, vertical: 30).copyWith(bottom: MediaQuery.of(context).padding.bottom),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30)
+                    .copyWith(bottom: MediaQuery.of(context).padding.bottom),
                 child: Column(
                   children: [
                     Text(
@@ -86,7 +97,8 @@ studentRegisterBottomSheet({required BuildContext context}) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter an email';
                         }
-                        final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$');
+                        final emailRegex =
+                            RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$');
                         if (!emailRegex.hasMatch(value)) {
                           return 'Please enter a valid email';
                         }
