@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:stu_teach/core/error/failure.dart';
-import 'package:stu_teach/features/auth/data/models/login/response/login_response_model.dart';
+import 'package:stu_teach/features/auth/data/models/login/response/auth_response_model.dart';
 
 // Base AuthState class
 abstract class AuthState extends Equatable {
@@ -30,7 +30,7 @@ class AuthLoadingState extends AuthState {
 
 // Authenticated State
 class AuthenticatedState extends AuthState {
-  final LoginResponseModel response;
+  final AuthResponseModel response;
 
   const AuthenticatedState({
     required this.response,

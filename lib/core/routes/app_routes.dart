@@ -7,5 +7,6 @@ class AppRoutes {
   static const String mainScreen = "mainScreen";
   static const String noInternet = "noInternet";
   static const String login = "login";
+  static const String studentLogin = "studentLogin";
   static const String studentMainScreen = "studentMainScreen";
 }

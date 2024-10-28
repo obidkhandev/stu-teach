@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stu_teach/core/extension/widget_extantion.dart';
 import 'package:stu_teach/core/routes/app_routes.dart';
@@ -8,17 +9,19 @@ import 'package:stu_teach/core/values/app_colors.dart';
 import 'package:stu_teach/features/auth/presentation/cubit/auth/auth_cubit.dart';
 import 'package:stu_teach/features/auth/presentation/cubit/auth/auth_state.dart';
 import 'package:stu_teach/features/auth/presentation/pages/login/part/custom_dialog.dart';
+import 'package:stu_teach/features/auth/presentation/pages/student_auth/part/student_register_bottom_sheet.dart';
+import 'package:stu_teach/features/common/widget/custom_app_bar.dart';
 import 'package:stu_teach/features/common/widget/custom_button.dart';
 import 'package:stu_teach/features/common/widget/text_field_widget.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class StudentAuthScreen extends StatefulWidget {
+  const StudentAuthScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<StudentAuthScreen> createState() => _StudentAuthScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _StudentAuthScreenState extends State<StudentAuthScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -56,14 +59,15 @@ class _LoginScreenState extends State<LoginScreen> {
         listener: (context, state) {
           // Navigate to onboarding on successful login
           if (state is AuthenticatedState) {
-            Navigator.pushNamedAndRemoveUntil(context, AppRoutes.mainScreen, (route) => false);
+            Navigator.pushNamedAndRemoveUntil(
+                context, AppRoutes.studentMainScreen, (route) => false);
           }
 
           // Show error message if there's an error
           if (state is AuthErrorState) {
-            customDialog(context, 'User not found!!!', state.message, AppIcons.icError);
+            customDialog(
+                context, 'User not found!!!', state.message, AppIcons.icError);
           }
-
         },
         builder: (context, state) {
           final bloc = context.read<AuthCubit>();
@@ -85,20 +89,24 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           const SizedBox(height: 20),
                           Text(
-                            'Kirish',
-                            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: 'Unbounded',
-                            ),
+                            'Student Login',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineLarge
+                                ?.copyWith(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Unbounded',
+                                ),
                           ),
                           SizedBox(height: he(12)),
                           Text(
                             'Tizimga kirish uchun elektron pochta manzilingiz va parolni kiriting!',
-                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                            ),
+                            style:
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                    ),
                           ).paddingOnly(right: wi(15)),
                           SizedBox(height: he(24)),
                           CustomTextField(
@@ -126,6 +134,19 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                             validator: (value) => validatePassword(value ?? ''),
                           ),
+                          SizedBox(height: he(15)),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushReplacementNamed(context, AppRoutes.login);
+                            },
+                            child: Text(
+                              "I am a teacher",
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                color: AppColors.primaryColor,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
                           SizedBox(height: he(50)),
                           Row(
                             children: [
@@ -133,7 +154,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 width: MediaQuery.of(context).size.width * 0.6,
                                 child: CustomButton(
                                   text: "Ro'yhatdan o'tish",
-                                  onTap: () {},
+                                  onTap: () {
+                                    studentRegisterBottomSheet(
+                                        context: context);
+                                  },
                                 ),
                               ),
                               SizedBox(width: wi(15)),
@@ -142,7 +166,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   text: "Kirish",
                                   isLoading: state is AuthLoadingState,
                                   onTap: () {
-                                    if (_formKey.currentState?.validate() ?? false) {
+                                    if (_formKey.currentState?.validate() ??
+                                        false) {
                                       bloc.loginUser(
                                         emailController.text,
                                         passwordController.text,
@@ -165,5 +190,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
 }

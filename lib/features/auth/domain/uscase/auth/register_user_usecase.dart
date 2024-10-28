@@ -7,24 +7,24 @@ import 'package:stu_teach/features/auth/data/models/login/response/auth_response
 import 'package:stu_teach/features/auth/domain/repository/auth.dart';
 
 
-class LoginUserUsecase extends UseCase<AuthResponseModel, LoginParams> {
+class RegisterUserUsecase extends UseCase<AuthResponseModel, RegisterParams> {
   final IAuthRepository _repo;
 
-  LoginUserUsecase(this._repo);
+  RegisterUserUsecase(this._repo);
 
   @override
-  Future<Either<Failure, AuthResponseModel>> call(LoginParams params) {
-    return _repo.loginUser(params.request);
+  Future<Either<Failure, AuthResponseModel>> call(RegisterParams params) {
+    return _repo.registerUser(params.request);
   }
 }
 
-class LoginParams extends Equatable {
+class RegisterParams extends Equatable {
   final AuthRequestModel request;
 
-  const LoginParams({required this.request});
+  const RegisterParams({required this.request});
 
   @override
   List<Object?> get props => [
-        request,
-      ];
+    request,
+  ];
 }

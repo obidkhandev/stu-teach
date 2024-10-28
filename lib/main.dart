@@ -11,10 +11,10 @@ import 'package:stu_teach/core/utils/size_config.dart';
 import 'package:stu_teach/core/values/app_theme.dart';
 import 'package:stu_teach/di.dart';
 import 'package:stu_teach/features/auth/presentation/cubit/auth/auth_cubit.dart';
-import 'package:stu_teach/features/auth/presentation/cubit/maintab/main_tab_cubit.dart';
 import 'package:stu_teach/core/services/firebase/firebase_options.dart';
 import 'package:stu_teach/features/main/presentation/cubit/task/task_cubit.dart';
 import 'package:stu_teach/features/main/presentation/cubit/upload_file/upload_file_cubit.dart';
+import 'package:stu_teach/features/student_tab/maintab/main_tab_cubit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
         builder: (context, child) {
           return ScrollConfiguration(behavior: MyBehavior(), child: child!);
         },
-        initialRoute: AppRoutes.mainScreen,
+        initialRoute: AppRoutes.studentLogin,
       ),
     );
   }

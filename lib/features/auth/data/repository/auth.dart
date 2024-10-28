@@ -3,16 +3,16 @@ import 'package:dartz/dartz.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stu_teach/core/api/list_api.dart';
 import 'package:stu_teach/core/error/failure.dart';
-import 'package:stu_teach/features/auth/data/datasourse/login_datasourse.dart';
-import 'package:stu_teach/features/auth/data/models/login/request/login_request_model.dart';
-import 'package:stu_teach/features/auth/data/models/login/response/login_response_model.dart';
+import 'package:stu_teach/features/auth/data/datasourse/auth_datasourse.dart';
+import 'package:stu_teach/features/auth/data/models/login/request/auth_request_model.dart';
+import 'package:stu_teach/features/auth/data/models/login/response/auth_response_model.dart';
 import 'package:stu_teach/features/auth/domain/repository/auth.dart';
 
 
 
 class AuthRepository implements IAuthRepository {
   final SharedPreferences _preferences;
-  final LoginDatasource loginDatasourceImpl;
+  final AuthDatasource loginDatasourceImpl;
   AuthRepository(this._preferences, this.loginDatasourceImpl);
 
   @override
@@ -36,8 +36,19 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<Either<Failure, LoginResponseModel>> loginUser(LoginRequestModel request) async {
-    final response = await loginDatasourceImpl.loginUser(request);
+  Future<Either<Failure, AuthResponseModel>> loginUser(AuthRequestModel request) async {
+    final response = await loginDatasourceImpl.login(request);
+    return response.fold(
+          (failure) => Left(failure),
+          (response) async {
+        return Right(response);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, AuthResponseModel>> registerUser(AuthRequestModel request) async {
+    final response = await loginDatasourceImpl.register(request);
     return response.fold(
           (failure) => Left(failure),
           (response) async {
