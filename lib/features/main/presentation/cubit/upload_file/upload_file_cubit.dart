@@ -46,12 +46,11 @@ class UploadFileCubit extends Cubit<UploadFileState> {
   }
 
 
-  @override
-  Future<void> close() {
+  void setUrl(String url){
+    emit(UploadFileSuccess(url));
+  }
 
-      emit(UploadFileInitial());
-    // }
-
-    return super.close();
+  void reset(){
+    emit(UploadFileInitial());
   }
 }

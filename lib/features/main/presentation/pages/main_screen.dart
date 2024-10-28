@@ -8,9 +8,10 @@ import 'package:stu_teach/features/common/widget/custom_app_bar.dart';
 import 'package:stu_teach/features/common/widget/custom_button.dart';
 import 'package:stu_teach/features/common/widget/loading_widget.dart';
 import 'package:stu_teach/features/main/presentation/cubit/task/task_cubit.dart';
+import 'package:stu_teach/features/main/presentation/cubit/upload_file/upload_file_cubit.dart';
 import 'package:stu_teach/features/main/presentation/pages/part/add_task_dialog.dart';
+import 'package:stu_teach/features/main/presentation/pages/part/edit_tasks.dart';
 import 'package:stu_teach/features/main/presentation/pages/widget/teacher_task_item.dart';
-import 'package:stu_teach/features/main/presentation/pages/widget/teacher_tasks_list.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -52,8 +53,12 @@ class _MainScreenState extends State<MainScreen> {
                     await bloc.fetchAllTasks();
                   },
                   onEdit: () async {
-                    // await bloc.editTask(state.tasks[index].id, state.tasks[index]);
-                    await bloc.fetchAllTasks();
+                    context.read<UploadFileCubit>().setUrl(state.tasks[index].fileUrl);
+
+                    showModalBottomSheet(context: context, builder: (context){
+                      return EditTaskDialog(model: state.tasks[index]);
+                    });
+
                   },
                   onSee: () {},
                 );
@@ -65,7 +70,9 @@ class _MainScreenState extends State<MainScreen> {
           } else if (state is TeacherTaskLoading) {
             return const LoadingWidget();
           } else if (state is TeacherTaskError) {
-            return CustomButton(text: "Try again", onTap: () {});
+            return CustomButton(text: "Try again", onTap: () async {
+              await bloc.fetchAllTasks();
+            });
           } else {
             return const SizedBox.shrink();
           }

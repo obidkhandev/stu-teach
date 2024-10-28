@@ -1,10 +1,12 @@
-class TaskResponse{
+class TaskResponse {
   final String id;
   final String title;
   final String date;
   final String fileUrl;
+  final String tarif;
 
   final int finishedCount;
+  final List<String> userIds;
 
   TaskResponse({
     required this.id,
@@ -12,8 +14,9 @@ class TaskResponse{
     required this.date,
     required this.fileUrl,
     required this.finishedCount,
+    required this.userIds,
+    required this.tarif,
   });
-
 
   factory TaskResponse.fromJson(Map<String, dynamic> json) {
     return TaskResponse(
@@ -22,7 +25,8 @@ class TaskResponse{
       date: json['date'] as String,
       fileUrl: json['fileUrl'] as String,
       finishedCount: json['finishedCount'] as int,
+      userIds: List<String>.from(json['userIds'] as List),
+      tarif: json['tarif'] as String,
     );
   }
-
 }

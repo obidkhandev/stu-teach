@@ -2,7 +2,10 @@ part of 'upload_file_cubit.dart';
 
 abstract class UploadFileState extends Equatable {}
 
+
+
 class UploadFileInitial extends UploadFileState {
+
   @override
   List<Object> get props => [];
 }

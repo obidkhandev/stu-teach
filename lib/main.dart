@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => inject<MainTabCubit>()),
         BlocProvider(create: (context) => inject<AuthCubit>()),
+        BlocProvider(create: (context) => inject<UploadFileCubit>()),
         BlocProvider(
           create: (context) => inject<TeacherTaskCubit>()..fetchAllTasks(),
         ),
