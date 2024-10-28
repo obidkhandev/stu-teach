@@ -60,7 +60,7 @@ void _repositories() {
       () => AuthRepository(inject(), inject()));
 
   // Upload File And Task
-  inject.registerLazySingleton<TeacherTaskRepositories>(
+  inject.registerLazySingleton<TaskRepositories>(
       () => TeacherTasksRepositoriesImpl(inject(), inject()));
 
   inject.registerLazySingleton<StudentRepository>(
@@ -76,8 +76,8 @@ void _dataSources() {
     () => UploadFileDatasourceImpl(FirebaseStorage.instance),
   );
 
-  inject.registerLazySingleton<TeacherTaskDatasource>(
-    () => TeacherTaskDatasourceImpl(FirebaseFirestore.instance),
+  inject.registerLazySingleton<TaskDatasource>(
+    () => TaskDatasourceImpl(FirebaseFirestore.instance),
   );
 
   inject.registerLazySingleton<StudentDatasource>(
@@ -125,5 +125,5 @@ void _cubit() {
 
   // Upload file
   inject.registerFactory(
-      () => TeacherTaskCubit(inject(), inject(), inject(), inject()));
+      () => TaskCubit(inject(), inject(), inject(), inject()));
 }

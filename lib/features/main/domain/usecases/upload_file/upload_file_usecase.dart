@@ -6,7 +6,7 @@ import 'package:stu_teach/core/usecase/usecase.dart';
 import 'package:stu_teach/features/main/domain/repositories/teacher_task_repositories.dart';
 
 class UploadFileUseCase extends UseCase<String, UploadFileParams> {
-  final TeacherTaskRepositories _repo;
+  final TaskRepositories _repo;
 
   UploadFileUseCase(this._repo);
 

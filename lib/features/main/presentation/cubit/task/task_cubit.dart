@@ -10,56 +10,56 @@ import 'package:stu_teach/features/main/domain/usecases/tasks/get_all_task_useca
 
 part 'task_state.dart';
 
-class TeacherTaskCubit extends Cubit<TeacherTaskState> {
+class TaskCubit extends Cubit<TaskState> {
   final GetAllTasksUseCase _getAllTasksUseCase;
   final AddTaskUseCase _addTaskUseCase;
   final EditTaskUseCase _editTaskUseCase;
   final DeleteTaskUseCase _deleteTaskUseCase;
 
-  TeacherTaskCubit(
+  TaskCubit(
       this._getAllTasksUseCase,
       this._addTaskUseCase,
       this._editTaskUseCase,
       this._deleteTaskUseCase,
-      ) : super(TeacherTaskInitial());
+      ) : super(TaskInitial());
 
   Future<void> fetchAllTasks() async {
-    emit(TeacherTaskLoading());
+    emit(TaskLoading());
     final result = await _getAllTasksUseCase(NoParams());
 
     emit(result.fold(
-          (failure) => TeacherTaskError(failure),
-          (tasks) => TeacherTaskLoaded(tasks),
+          (failure) => TaskError(failure),
+          (tasks) => TaskLoaded(tasks),
     ));
   }
 
   Future<void> addTask(AddTaskRequestModel request) async {
-    emit(TeacherTaskLoading());
+    emit(TaskLoading());
     final result = await _addTaskUseCase(AddTaskParams(request));
 
     emit(result.fold(
-          (failure) => TeacherTaskError(failure),
-          (taskId) => TeacherTaskAdded(taskId),
+          (failure) => TaskError(failure),
+          (taskId) => TaskAdded(taskId),
     ));
   }
 
   Future<void> editTask(String taskId, AddTaskRequestModel request) async {
-    emit(TeacherTaskLoading());
+    emit(TaskLoading());
     final result = await _editTaskUseCase(EditTaskParams(taskId, request));
 
     emit(result.fold(
-          (failure) => TeacherTaskError(failure),
-          (_) => TeacherTaskEdited(),
+          (failure) => TaskError(failure),
+          (_) => TaskEdited(),
     ));
   }
 
   Future<void> deleteTask(String taskId) async {
-    emit(TeacherTaskLoading());
+    emit(TaskLoading());
     final result = await _deleteTaskUseCase(DeleteTaskParams(taskId));
 
     emit(result.fold(
-          (failure) => TeacherTaskError(failure),
-          (_) => TeacherTaskDeleted(),
+          (failure) => TaskError(failure),
+          (_) => TaskDeleted(),
     ));
   }
 }

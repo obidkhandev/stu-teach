@@ -6,14 +6,15 @@ import 'package:stu_teach/core/values/app_assets.dart';
 import 'package:stu_teach/core/values/app_colors.dart';
 import 'package:stu_teach/features/main/data/model/get_teacher_tasks/response/get_all_tasks_response.dart';
 
-class TeacherTaskItem extends StatelessWidget {
+class TaskItem extends StatelessWidget {
   final Function()? onEdit;
   final Function()? onDelete;
   final Function()? onSee;
+  final bool isStudent;
   final TaskResponse model;
 
-  const TeacherTaskItem(
-      {super.key, this.onEdit, this.onDelete, this.onSee, required this.model});
+  const TaskItem(
+      {super.key, this.onEdit, this.onDelete, this.onSee, required this.model, required this.isStudent});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +49,9 @@ class TeacherTaskItem extends StatelessWidget {
             ),
           ),
         ),
+
         SizedBox(width: wi(20)),
+        if(!isStudent)
         SizedBox(
           height: he(30),
           width: wi(30),
@@ -70,6 +73,7 @@ class TeacherTaskItem extends StatelessWidget {
             ),
           ),
         ),
+        if(!isStudent)
         SizedBox(width: wi(12)),
         SizedBox(
           height: he(30),
@@ -92,7 +96,11 @@ class TeacherTaskItem extends StatelessWidget {
             ),
           ),
         ),
+        if(!isStudent)
+
         SizedBox(width: wi(12)),
+        if(!isStudent)
+
         SizedBox(
           height: he(30),
           width: wi(30),

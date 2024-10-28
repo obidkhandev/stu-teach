@@ -5,7 +5,7 @@ import 'package:stu_teach/features/main/data/model/get_teacher_tasks/response/ge
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
-abstract class TeacherTaskDatasource {
+abstract class TaskDatasource {
   Future<Either<Failure, List<TaskResponse>>> getAllTasks();
   Future<Either<Failure, String>> addTask(AddTaskRequestModel request);
   Future<Either<Failure, void>> editTask(String taskId,AddTaskRequestModel request);
@@ -14,10 +14,10 @@ abstract class TeacherTaskDatasource {
 }
 
 
-class TeacherTaskDatasourceImpl implements TeacherTaskDatasource {
+class TaskDatasourceImpl implements TaskDatasource {
   final FirebaseFirestore firestore;
 
-  TeacherTaskDatasourceImpl(this.firestore);
+  TaskDatasourceImpl(this.firestore);
 
   @override
   Future<Either<Failure, List<TaskResponse>>> getAllTasks() async {

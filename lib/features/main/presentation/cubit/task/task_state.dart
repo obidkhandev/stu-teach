@@ -1,30 +1,30 @@
 part of 'task_cubit.dart';
 
 
-abstract class TeacherTaskState {}
+abstract class TaskState {}
 
-final class TeacherTaskInitial extends TeacherTaskState {}
+final class TaskInitial extends TaskState {}
 
-final class TeacherTaskLoading extends TeacherTaskState {}
+final class TaskLoading extends TaskState {}
 
-final class TeacherTaskLoaded extends TeacherTaskState {
+final class TaskLoaded extends TaskState {
   final List<TaskResponse> tasks;
 
-  TeacherTaskLoaded(this.tasks);
+  TaskLoaded(this.tasks);
 }
 
-final class TeacherTaskAdded extends TeacherTaskState {
+final class TaskAdded extends TaskState {
   final String taskId;
 
-  TeacherTaskAdded(this.taskId);
+  TaskAdded(this.taskId);
 }
 
-final class TeacherTaskEdited extends TeacherTaskState {}
+final class TaskEdited extends TaskState {}
 
-final class TeacherTaskDeleted extends TeacherTaskState {}
+final class TaskDeleted extends TaskState {}
 
-final class TeacherTaskError extends TeacherTaskState {
+final class TaskError extends TaskState {
   final Failure failure;
 
-  TeacherTaskError(this.failure);
+  TaskError(this.failure);
 }

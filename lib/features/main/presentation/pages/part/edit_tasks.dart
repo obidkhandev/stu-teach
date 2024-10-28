@@ -175,14 +175,14 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
                             );
 
                             // Access TaskCubit
-                            final taskCubit = BlocProvider.of<TeacherTaskCubit>(context);
+                            final taskCubit = BlocProvider.of<TaskCubit>(context);
 
                             // Add task using TaskCubit
                             await taskCubit.editTask(widget.model.id,taskRequest);
 
                             // You can also listen to the state and show a success or failure message if needed
                              taskCubit.stream.listen((state)async  {
-                              if (state is TeacherTaskEdited) {
+                              if (state is TaskEdited) {
                                  fileBloc.reset();
                                 await taskCubit.fetchAllTasks();
 
@@ -194,7 +194,7 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
 
 
                                 // Close the dialog
-                              } else if (state is TeacherTaskError) {
+                              } else if (state is TaskError) {
                                 customToast(
                                   message:
                                   "Failed to edited task: ${state.failure}",

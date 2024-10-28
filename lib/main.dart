@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => inject<UploadFileCubit>()),
         BlocProvider(create: (context) => inject<StudentCubit>()),
         BlocProvider(
-          create: (context) => inject<TeacherTaskCubit>()..fetchAllTasks(),
+          create: (context) => inject<TaskCubit>()..fetchAllTasks(),
         ),
       ],
       child: MaterialApp(

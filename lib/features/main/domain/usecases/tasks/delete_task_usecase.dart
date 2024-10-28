@@ -4,7 +4,7 @@ import 'package:stu_teach/core/usecase/usecase.dart';
 import 'package:stu_teach/features/main/domain/repositories/teacher_task_repositories.dart';
 
 class DeleteTaskUseCase extends UseCase<void, DeleteTaskParams> {
-  final TeacherTaskRepositories _repo;
+  final TaskRepositories _repo;
 
   DeleteTaskUseCase(this._repo);
 

@@ -8,7 +8,7 @@ import 'package:stu_teach/features/main/data/model/get_teacher_tasks/response/ge
 import 'package:stu_teach/features/main/domain/repositories/teacher_task_repositories.dart';
 
 class GetAllTasksUseCase extends UseCase<List<TaskResponse>, NoParams> {
-  final TeacherTaskRepositories _repo;
+  final TaskRepositories _repo;
 
   GetAllTasksUseCase(this._repo);
 

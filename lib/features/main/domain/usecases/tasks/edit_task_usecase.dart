@@ -7,7 +7,7 @@ import 'package:stu_teach/features/main/data/model/add_task/request/add_task_req
 import 'package:stu_teach/features/main/domain/repositories/teacher_task_repositories.dart';
 
 class EditTaskUseCase extends UseCase<void, EditTaskParams> {
-  final TeacherTaskRepositories _repo;
+  final TaskRepositories _repo;
 
   EditTaskUseCase(this._repo);
 

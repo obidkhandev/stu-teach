@@ -13,6 +13,7 @@ import 'package:stu_teach/features/main/presentation/pages/part/add_task_dialog.
 import 'package:stu_teach/features/main/presentation/pages/part/edit_tasks.dart';
 import 'package:stu_teach/features/main/presentation/pages/widget/file_type_widget.dart';
 import 'package:stu_teach/features/main/presentation/pages/widget/teacher_task_item.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -39,26 +40,26 @@ class _MainScreenState extends State<MainScreen> {
       appBar: const CustomAppBar(
         title: 'Main Screen',
       ),
-      body: BlocBuilder<TeacherTaskCubit, TeacherTaskState>(
+      body: BlocBuilder<TaskCubit, TaskState>(
         builder: (context, state) {
-          final bloc = context.read<TeacherTaskCubit>();
-          if (state is TeacherTaskLoaded) {
+          final bloc = context.read<TaskCubit>();
+          if (state is TaskLoaded) {
             return Column(
               children: [
                 ListView.separated(
                   itemCount: state.tasks.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return TeacherTaskItem(
+                    return TaskItem(
                       model: state.tasks[index],
                       onDelete: () async {
                         await bloc.deleteTask(state.tasks[index].id);
                         await bloc.fetchAllTasks();
                       },
                       onEdit: () async {
-                        context
-                            .read<UploadFileCubit>()
-                            .setUrl(state.tasks[index].fileUrl,state.tasks[index].urlType);
+                        context.read<UploadFileCubit>().setUrl(
+                            state.tasks[index].fileUrl,
+                            state.tasks[index].urlType);
 
                         showModalBottomSheet(
                             context: context,
@@ -66,16 +67,17 @@ class _MainScreenState extends State<MainScreen> {
                               return EditTaskDialog(model: state.tasks[index]);
                             });
                       },
-                      onSee: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => FileTypeWidget(
-                              url: state.tasks[index].fileUrl, type: state.tasks[index].urlType,
-                            ),
+                      onSee: () async {
+                        final canLaunch =  await canLaunchUrl(
+                          Uri.parse(
+                            state.tasks[index].fileUrl,
                           ),
                         );
+                        if(canLaunch){
+                          launchUrl(Uri.parse(state.tasks[index].fileUrl));
+                        }
                       },
+                      isStudent: false,
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) {
@@ -84,9 +86,9 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ],
             );
-          } else if (state is TeacherTaskLoading) {
+          } else if (state is TaskLoading) {
             return const LoadingWidget();
-          } else if (state is TeacherTaskError) {
+          } else if (state is TaskError) {
             return CustomButton(
                 text: "Try again",
                 onTap: () async {

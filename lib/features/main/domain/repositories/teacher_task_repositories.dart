@@ -5,7 +5,7 @@ import 'package:stu_teach/core/error/failure.dart';
 import 'package:stu_teach/features/main/data/model/add_task/request/add_task_request_model.dart';
 import 'package:stu_teach/features/main/data/model/get_teacher_tasks/response/get_all_tasks_response.dart';
 
-abstract class TeacherTaskRepositories{
+abstract class TaskRepositories{
   Future<Either<Failure, String>> uploadFile(File file);
 
   Future<Either<Failure, List<TaskResponse>>> getAllTasks();

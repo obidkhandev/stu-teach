@@ -7,9 +7,9 @@ import 'package:stu_teach/features/main/data/model/add_task/request/add_task_req
 import 'package:stu_teach/features/main/data/model/get_teacher_tasks/response/get_all_tasks_response.dart';
 import 'package:stu_teach/features/main/domain/repositories/teacher_task_repositories.dart';
 
-class TeacherTasksRepositoriesImpl extends TeacherTaskRepositories {
+class TeacherTasksRepositoriesImpl extends TaskRepositories {
   final UploadFileDatasource _fileDatasource;
-  final TeacherTaskDatasource _taskDatasource;
+  final TaskDatasource _taskDatasource;
 
   TeacherTasksRepositoriesImpl(this._fileDatasource, this._taskDatasource);
 

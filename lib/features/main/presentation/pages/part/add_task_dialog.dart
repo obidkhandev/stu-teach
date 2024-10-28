@@ -158,14 +158,14 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                             );
 
                             // Access TaskCubit
-                            final taskCubit = BlocProvider.of<TeacherTaskCubit>(context);
+                            final taskCubit = BlocProvider.of<TaskCubit>(context);
 
                             // Add task using TaskCubit
                             await taskCubit.addTask(taskRequest);
 
                             // Listen to the state and show a success or failure message
                             taskCubit.stream.listen((state) async {
-                              if (state is TeacherTaskAdded) {
+                              if (state is TaskAdded) {
                                 fileBloc.reset();
                                 await taskCubit.fetchAllTasks();
 
@@ -175,7 +175,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                                 );
 
                                 Navigator.of(context).pop(); // Close the dialog
-                              } else if (state is TeacherTaskError) {
+                              } else if (state is TaskError) {
                                 customToast(
                                   message: "Failed to add task: ${state.failure}",
                                   bgColor: Colors.red,
