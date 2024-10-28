@@ -8,6 +8,7 @@ class AddTaskRequestModel {
   final String fileType;
 
   final int finishedCount;
+  final List<String> receivedUrl;
 
   AddTaskRequestModel({
     required this.id,
@@ -18,6 +19,7 @@ class AddTaskRequestModel {
     required this.tarif,
     required this.userIds,
     required this.fileType,
+    required this.receivedUrl,
   });
 
   Map<String, dynamic> toJson() => {
@@ -27,8 +29,9 @@ class AddTaskRequestModel {
         'fileUrl': fileUrl,
         'finishedCount': finishedCount,
         'tarif': tarif,
-    'userIds': userIds,
-    'fileType': fileType
+        'userIds': userIds,
+        'fileType': fileType,
+        'receivedUrl': receivedUrl
       };
 
   AddTaskRequestModel copyWith({
@@ -40,6 +43,7 @@ class AddTaskRequestModel {
     String? fileType,
     int? finishedCount,
     List<String>? userIds,
+    List<String>? receivedUrl,
   }) {
     return AddTaskRequestModel(
       id: id ?? this.id,
@@ -48,7 +52,9 @@ class AddTaskRequestModel {
       tarif: tarif ?? this.tarif,
       date: date ?? this.date,
       fileUrl: fileUrl ?? this.fileUrl,
-      finishedCount: finishedCount ?? this.finishedCount, fileType: fileType ?? this.fileType,
+      finishedCount: finishedCount ?? this.finishedCount,
+      fileType: fileType ?? this.fileType,
+      receivedUrl: receivedUrl ?? this.receivedUrl,
     );
   }
 }

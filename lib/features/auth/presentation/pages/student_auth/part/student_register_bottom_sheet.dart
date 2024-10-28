@@ -28,10 +28,12 @@ studentRegisterBottomSheet({required BuildContext context}) {
         listener: (context, state) {
           if (state is AuthenticatedState) {
             final student = StudentModel(
-                id: '',
-                name: nameController.text,
-                email: emailController.text,
-                password: passwordController.text);
+              id: '',
+              name: nameController.text,
+              email: emailController.text,
+              password: passwordController.text,
+              completedTasksIds: [],
+            );
             context.read<StudentCubit>().addStudent(student);
             Navigator.pushNamedAndRemoveUntil(
                 context, AppRoutes.studentMainScreen, (route) => false);

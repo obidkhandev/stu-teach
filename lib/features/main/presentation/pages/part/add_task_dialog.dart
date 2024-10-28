@@ -21,8 +21,9 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _tarifController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   DateTime? selectedDate;
+  String fileUrl = '';
+  String fileType = '';
 
   @override
   void dispose() {
@@ -44,9 +45,6 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
       });
     }
   }
-
-  String fileUrl  = '';
-  String fileType  = '';
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +126,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                             isLoading: fileState is UploadFileLoading,
                             onTap: () => fileBloc.selectAndUploadFile(),
                           ),
-                        )
+                        ),
                       ],
                     ),
                     const SizedBox(height: 20),
@@ -154,7 +152,9 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                               userIds: [],
                               fileUrl: fileUrl,
                               id: '',
-                              finishedCount: 0, fileType: fileType,
+                              finishedCount: 0,
+                              fileType: fileType,
+                              receivedUrl: [],
                             );
 
                             // Access TaskCubit
@@ -163,25 +163,25 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                             // Add task using TaskCubit
                             await taskCubit.addTask(taskRequest);
 
-                            // Listen to the state and show a success or failure message
-                            taskCubit.stream.listen((state) async {
-                              if (state is TaskAdded) {
-                                fileBloc.reset();
-                                await taskCubit.fetchAllTasks();
+                            // Check the state after adding the task
+                            final taskState = taskCubit.state;
 
-                                customToast(
-                                  message: "Task added successfully",
-                                  bgColor: AppColors.primaryColor,
-                                );
+                            if (taskState is TaskAdded) {
+                              fileBloc.reset();
+                              await taskCubit.fetchAllTasks();
 
-                                Navigator.of(context).pop(); // Close the dialog
-                              } else if (state is TaskError) {
-                                customToast(
-                                  message: "Failed to add task: ${state.failure}",
-                                  bgColor: Colors.red,
-                                );
-                              }
-                            });
+                              customToast(
+                                message: "Task added successfully",
+                                bgColor: AppColors.primaryColor,
+                              );
+
+                              Navigator.of(context).pop(); // Close the dialog
+                            } else if (taskState is TaskError) {
+                              customToast(
+                                message: "Failed to add task: ${taskState.failure}",
+                                bgColor: Colors.red,
+                              );
+                            }
                           }
                         }
                       },

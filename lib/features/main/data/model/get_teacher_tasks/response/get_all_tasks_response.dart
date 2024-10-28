@@ -6,9 +6,9 @@ class TaskResponse {
   final String tarif;
   final String urlType;
 
-
   final int finishedCount;
   final List<String> userIds;
+  final List<String> receivedUrl;
 
   TaskResponse({
     required this.id,
@@ -19,6 +19,7 @@ class TaskResponse {
     required this.userIds,
     required this.tarif,
     required this.urlType,
+    required this.receivedUrl,
   });
 
   factory TaskResponse.fromJson(Map<String, dynamic> json) {
@@ -31,6 +32,46 @@ class TaskResponse {
       userIds: List<String>.from(json['userIds'] as List),
       tarif: json['tarif'] as String,
       urlType: json['fileType'] as String,
+      receivedUrl: List<String>.from(json['receivedUrl'] as List),
+    );
+  }
+
+  // Method to convert an instance to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'date': date,
+      'fileUrl': fileUrl,
+      'finishedCount': finishedCount,
+      'userIds': userIds,
+      'tarif': tarif,
+      'fileType': urlType,
+      'receivedUrl': receivedUrl,
+    };
+  }
+
+  TaskResponse copyWith({
+    String? id,
+    String? title,
+    String? date,
+    String? fileUrl,
+    String? tarif,
+    String? urlType,
+    int? finishedCount,
+    List<String>? userIds,
+    List<String>? receivedUrl,
+  }) {
+    return TaskResponse(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      date: date ?? this.date,
+      fileUrl: fileUrl ?? this.fileUrl,
+      tarif: tarif ?? this.tarif,
+      urlType: urlType ?? this.urlType,
+      finishedCount: finishedCount ?? this.finishedCount,
+      userIds: userIds ?? this.userIds,
+      receivedUrl: receivedUrl ?? this.receivedUrl,
     );
   }
 }

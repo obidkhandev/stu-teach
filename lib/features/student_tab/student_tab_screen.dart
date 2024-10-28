@@ -13,11 +13,6 @@ class StudentTabScreen extends StatefulWidget {
 }
 
 class _StudentTabScreenState extends State<StudentTabScreen> {
-  @override
-  void initState() {
-    BlocProvider.of<StudentCubit>(context).getStudent();
-    super.initState();
-  }
 
   int currentIndex = 0;
 

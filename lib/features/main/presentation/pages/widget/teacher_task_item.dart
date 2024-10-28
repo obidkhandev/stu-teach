@@ -10,11 +10,12 @@ class TaskItem extends StatelessWidget {
   final Function()? onEdit;
   final Function()? onDelete;
   final Function()? onSee;
+  final Function()? onUploadFile;
   final bool isStudent;
   final TaskResponse model;
 
   const TaskItem(
-      {super.key, this.onEdit, this.onDelete, this.onSee, required this.model, required this.isStudent});
+      {super.key, this.onEdit, this.onDelete, this.onSee, required this.model, required this.isStudent, this.onUploadFile});
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +89,30 @@ class TaskItem extends StatelessWidget {
             ),
             icon: SvgPicture.asset(
               AppIcons.icOpenEye,
+              width: wi(24),
+              colorFilter: const ColorFilter.mode(
+                AppColors.white,
+                BlendMode.srcIn,
+              ),
+            ),
+          ),
+        ),
+        if(isStudent)
+          SizedBox(width: wi(15)),
+        if(isStudent)
+        SizedBox(
+          height: he(30),
+          width: wi(30),
+          child: IconButton.filled(
+            onPressed: onUploadFile,
+            style: IconButton.styleFrom(
+              backgroundColor: AppColors.primaryColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+            icon: SvgPicture.asset(
+              'assets/icons/ic_upload.svg',
               width: wi(24),
               colorFilter: const ColorFilter.mode(
                 AppColors.white,

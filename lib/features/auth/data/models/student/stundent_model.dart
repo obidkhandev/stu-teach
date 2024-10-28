@@ -1,16 +1,19 @@
+import 'package:stu_teach/features/main/data/model/get_teacher_tasks/response/get_all_tasks_response.dart';
+
 class StudentModel {
   final String id;
   final String name;
   final String email;
   final String password;
-  final List<String> completedTasksIds;
+
+  final List<TaskResponse> completedTasksIds;
 
   StudentModel({
     required this.id,
     required this.name,
     required this.email,
     required this.password,
-    this.completedTasksIds = const [], // Default empty list for completed tasks
+    required this.completedTasksIds,
   });
 
   // Factory constructor to create an instance from JSON
@@ -20,7 +23,9 @@ class StudentModel {
       name: json['name'],
       email: json['email'],
       password: json['password'],
-      completedTasksIds: List<String>.from(json['completedTasksIds'] ?? []),
+      completedTasksIds: (json['completed_tasks'] as List<dynamic>?)
+          ?.map((task) => TaskResponse.fromJson(task))
+          .toList() ?? [],
     );
   }
 
@@ -31,7 +36,7 @@ class StudentModel {
       'name': name,
       'email': email,
       'password': password,
-      'completedTasksIds': completedTasksIds,
+      'completed_tasks': completedTasksIds.map((task) => task.toJson()).toList(),
     };
   }
 
@@ -41,7 +46,7 @@ class StudentModel {
     String? name,
     String? email,
     String? password,
-    List<String>? completedTasksIds,
+    List<TaskResponse>? completedTasksIds,
   }) {
     return StudentModel(
       id: id ?? this.id,

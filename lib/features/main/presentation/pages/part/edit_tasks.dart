@@ -13,6 +13,7 @@ import 'package:stu_teach/features/main/presentation/cubit/upload_file/upload_fi
 
 class EditTaskDialog extends StatefulWidget {
   final TaskResponse model;
+
   const EditTaskDialog({super.key, required this.model});
 
   @override
@@ -20,7 +21,6 @@ class EditTaskDialog extends StatefulWidget {
 }
 
 class _EditTaskDialogState extends State<EditTaskDialog> {
-
   late TextEditingController _nameController;
   late TextEditingController _tarifController;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -28,7 +28,6 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
   DateTime? selectedDate;
   String fileUrl = '';
   String fileType = '';
-
 
   @override
   void initState() {
@@ -67,8 +66,10 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
       duration: const Duration(milliseconds: 500),
       child: BlocConsumer<UploadFileCubit, UploadFileState>(
         listener: (context, fileState) {
-          if(fileState is UploadFileInitial){
-            context.read<UploadFileCubit>().setUrl(fileUrl,widget.model.urlType);
+          if (fileState is UploadFileInitial) {
+            context
+                .read<UploadFileCubit>()
+                .setUrl(fileUrl, widget.model.urlType);
           }
           if (fileState is UploadFileSuccess) {
             debugPrint('File uploaded successfully: ${fileState.url}');
@@ -170,34 +171,36 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
                                   ? fileState.url
                                   : '',
                               id: '',
-                              finishedCount:
-                              0, fileType: fileType, // Include uploaded file URL if available
+                              finishedCount: 0,
+                              fileType: fileType,
+                              receivedUrl: widget.model
+                                  .receivedUrl, // Include uploaded file URL if available
                             );
 
                             // Access TaskCubit
-                            final taskCubit = BlocProvider.of<TaskCubit>(context);
+                            final taskCubit =
+                                BlocProvider.of<TaskCubit>(context);
 
                             // Add task using TaskCubit
-                            await taskCubit.editTask(widget.model.id,taskRequest);
+                            await taskCubit.editTask(
+                                widget.model.id, taskRequest);
 
                             // You can also listen to the state and show a success or failure message if needed
-                             taskCubit.stream.listen((state)async  {
+                            taskCubit.stream.listen((state) async {
                               if (state is TaskEdited) {
-                                 fileBloc.reset();
+                                fileBloc.reset();
                                 await taskCubit.fetchAllTasks();
 
                                 customToast(
                                     message: "Task edited successfully",
                                     bgColor: AppColors.primaryColor);
-                                Navigator.of(context)
-                                    .pop();
-
+                                Navigator.of(context).pop();
 
                                 // Close the dialog
                               } else if (state is TaskError) {
                                 customToast(
                                   message:
-                                  "Failed to edited task: ${state.failure}",
+                                      "Failed to edited task: ${state.failure}",
                                   bgColor: Colors.red,
                                 );
                               }

@@ -11,6 +11,7 @@ import 'package:stu_teach/features/main/presentation/cubit/upload_file/upload_fi
 import 'package:stu_teach/features/main/presentation/pages/part/edit_tasks.dart';
 import 'package:stu_teach/features/main/presentation/pages/widget/file_type_widget.dart';
 import 'package:stu_teach/features/main/presentation/pages/widget/teacher_task_item.dart';
+import 'package:stu_teach/features/student_tab/pages/tasks/presentation/part/complete_task_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TasksScreen extends StatelessWidget {
@@ -35,24 +36,33 @@ class TasksScreen extends StatelessWidget {
                     return TaskItem(
                       model: state.tasks[index],
                       onDelete: () async {},
-                      onEdit: () async {
-                        context.read<UploadFileCubit>().setUrl(
-                            state.tasks[index].fileUrl,
-                            state.tasks[index].urlType);
-
+                      onUploadFile: () {
                         showModalBottomSheet(
                             context: context,
                             builder: (context) {
-                              return EditTaskDialog(model: state.tasks[index]);
+                              return CompleteTaskDialog(
+                                model: state.tasks[index],
+                              );
                             });
                       },
+                      onEdit: () async {
+                        // context.read<UploadFileCubit>().setUrl(
+                        //       state.tasks[index].fileUrl,
+                        //       state.tasks[index].urlType,
+                        //     );
+                        // showModalBottomSheet(
+                        //     context: context,
+                        //     builder: (context) {
+                        //       return EditTaskDialog(model: state.tasks[index]);
+                        //     });
+                      },
                       onSee: () async {
-                        final canLaunch =  await canLaunchUrl(
+                        final canLaunch = await canLaunchUrl(
                           Uri.parse(
                             state.tasks[index].fileUrl,
                           ),
                         );
-                        if(canLaunch){
+                        if (canLaunch) {
                           launchUrl(Uri.parse(state.tasks[index].fileUrl));
                         }
                       },

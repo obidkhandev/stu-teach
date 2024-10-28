@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:stu_teach/core/error/failure.dart';
 import 'package:stu_teach/core/usecase/usecase.dart';
 import 'package:stu_teach/features/auth/data/models/student/stundent_model.dart';
@@ -35,12 +37,29 @@ class StudentCubit extends Cubit<StudentState> {
   // Method to get a student by ID
   Future<void> getStudent() async {
     emit(StudentLoading());
-
-    Either<Failure, StudentModel> result = await getStudentUseCase.call(NoParams());
+    Either<Failure, StudentModel> result =
+        await getStudentUseCase.call(NoParams());
 
     result.fold(
       (failure) => emit(StudentFailure(failure)),
       (student) => emit(StudentSuccess(student)),
     );
+  }
+
+  Future<void> updateStudent(StudentModel student) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    emit(StudentLoading());
+
+    try {
+      await firestore
+          .collection('students')
+          .doc(student.id)
+          .update(student.toJson());
+
+      emit(StudentSuccess(student));
+    } catch (e) {
+      print("Error Update Student $e");
+      emit(StudentFailure(ServerFailure(500)));
+    }
   }
 }
