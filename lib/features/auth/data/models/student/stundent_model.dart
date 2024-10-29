@@ -5,8 +5,7 @@ class StudentModel {
   final String name;
   final String email;
   final String password;
-
-  final List<TaskResponse> completedTasksIds;
+  final List<UserCompletedTask> completedTasksIds;
 
   StudentModel({
     required this.id,
@@ -24,7 +23,7 @@ class StudentModel {
       email: json['email'],
       password: json['password'],
       completedTasksIds: (json['completed_tasks'] as List<dynamic>?)
-          ?.map((task) => TaskResponse.fromJson(task))
+          ?.map((task) => UserCompletedTask.fromJson(task))
           .toList() ?? [],
     );
   }
@@ -46,7 +45,7 @@ class StudentModel {
     String? name,
     String? email,
     String? password,
-    List<TaskResponse>? completedTasksIds,
+    List<UserCompletedTask>? completedTasksIds,
   }) {
     return StudentModel(
       id: id ?? this.id,
@@ -55,5 +54,31 @@ class StudentModel {
       password: password ?? this.password,
       completedTasksIds: completedTasksIds ?? this.completedTasksIds,
     );
+  }
+}
+
+class UserCompletedTask {
+  final String fileUrl;
+  final TaskResponse task;
+
+  UserCompletedTask({
+    required this.fileUrl,
+    required this.task,
+  });
+
+  // Factory constructor to create an instance from JSON
+  factory UserCompletedTask.fromJson(Map<String, dynamic> json) {
+    return UserCompletedTask(
+      fileUrl: json['fileUrl'],
+      task: TaskResponse.fromJson(json['task']),
+    );
+  }
+
+  // Method to convert an instance to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'fileUrl': fileUrl,
+      'task': task.toJson(),
+    };
   }
 }

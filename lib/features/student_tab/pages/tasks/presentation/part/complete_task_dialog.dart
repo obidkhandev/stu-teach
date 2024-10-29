@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stu_teach/core/utils/size_config.dart';
 import 'package:stu_teach/core/values/app_colors.dart';
+import 'package:stu_teach/features/auth/data/models/student/stundent_model.dart';
 import 'package:stu_teach/features/auth/presentation/cubit/student/student_cubit.dart';
 import 'package:stu_teach/features/auth/presentation/cubit/student/student_state.dart';
 import 'package:stu_teach/features/common/widget/custom_button.dart';
@@ -70,7 +71,6 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
                         bgColor: fileState is UploadFileSuccess
                             ? AppColors.primaryColor
                             : AppColors.grey2,
-
                         onTap: () async {
                           // Check if the file URL is empty
                           if (fileUrl.isEmpty) {
@@ -84,7 +84,8 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
                           }
 
                           final taskCubit = BlocProvider.of<TaskCubit>(context);
-                          TaskResponse taskModel = widget.model; // Original task model
+                          TaskResponse taskModel =
+                              widget.model; // Original task model
 
                           if (state is StudentSuccess) {
                             print("Success----");
@@ -92,8 +93,6 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
 
                             final studentModel =
                                 state.student; // Get the student model
-
-
 
                             // Update the task model
                             final updatedTaskModel = taskModel.copyWith(
@@ -105,11 +104,12 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
                             final updatedStudentModel = studentModel.copyWith(
                               completedTasksIds: [
                                 ...studentModel.completedTasksIds,
-                                taskModel
+                                UserCompletedTask(
+                                  fileUrl: fileUrl,
+                                  task: taskModel,
+                                )
                               ],
                             );
-
-
 
                             await taskCubit.editTask(
                               updatedTaskModel.id,
@@ -117,7 +117,7 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
                                 id: updatedTaskModel.id,
                                 title: updatedTaskModel.title,
                                 date: updatedTaskModel.date,
-                                fileUrl: fileUrl,
+                                fileUrl: widget.model.fileUrl,
                                 finishedCount: updatedTaskModel.finishedCount,
                                 tarif: updatedTaskModel.tarif,
                                 userIds: updatedTaskModel.userIds,
@@ -126,7 +126,8 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
                               ),
                             );
 
-                            await studentCubit.updateStudent(updatedStudentModel);
+                            await studentCubit
+                                .updateStudent(updatedStudentModel);
 
                             // Fetch all tasks after editing
                             await taskCubit.fetchAllTasks();
