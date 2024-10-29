@@ -185,7 +185,7 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
                                   id: widget.model.id,
                                   finishedCount: widget.model.finishedCount,
                                   fileType: state.fileType,
-                                  receivedUrl: widget.model.receivedUrl,
+                                  completedStudents: widget.model.completedStudents
                                 );
 
                                 // Edit task using TaskCubit

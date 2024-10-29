@@ -1,3 +1,5 @@
+import 'package:stu_teach/features/auth/data/models/student/stundent_model.dart';
+
 class TaskResponse {
   final String id;
   final String title;
@@ -5,10 +7,9 @@ class TaskResponse {
   final String fileUrl;
   final String tarif;
   final String urlType;
-
   final int finishedCount;
   final List<String> userIds;
-  final List<String> receivedUrl;
+  final List<StudentModel> completedStudents;
 
   TaskResponse({
     required this.id,
@@ -19,9 +20,10 @@ class TaskResponse {
     required this.userIds,
     required this.tarif,
     required this.urlType,
-    required this.receivedUrl,
+    required this.completedStudents,
   });
 
+  // Factory constructor to create an instance from JSON
   factory TaskResponse.fromJson(Map<String, dynamic> json) {
     return TaskResponse(
       id: json['id'] as String,
@@ -32,7 +34,10 @@ class TaskResponse {
       userIds: List<String>.from(json['userIds'] as List),
       tarif: json['tarif'] as String,
       urlType: json['fileType'] as String,
-      receivedUrl: List<String>.from(json['receivedUrl'] as List),
+      completedStudents: (json['completedStudents'] as List<dynamic>?)
+          ?.map((student) => StudentModel.fromJson(student))
+          .toList() ??
+          [],
     );
   }
 
@@ -47,10 +52,11 @@ class TaskResponse {
       'userIds': userIds,
       'tarif': tarif,
       'fileType': urlType,
-      'receivedUrl': receivedUrl,
+      'completedStudents': completedStudents.map((student) => student.toJson()).toList(),
     };
   }
 
+  // CopyWith method to create a new instance with updated fields
   TaskResponse copyWith({
     String? id,
     String? title,
@@ -61,6 +67,7 @@ class TaskResponse {
     int? finishedCount,
     List<String>? userIds,
     List<String>? receivedUrl,
+    List<StudentModel>? completedStudents,
   }) {
     return TaskResponse(
       id: id ?? this.id,
@@ -71,7 +78,7 @@ class TaskResponse {
       urlType: urlType ?? this.urlType,
       finishedCount: finishedCount ?? this.finishedCount,
       userIds: userIds ?? this.userIds,
-      receivedUrl: receivedUrl ?? this.receivedUrl,
+      completedStudents: completedStudents ?? this.completedStudents,
     );
   }
 }

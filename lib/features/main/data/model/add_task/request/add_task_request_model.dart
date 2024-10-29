@@ -1,3 +1,5 @@
+import 'package:stu_teach/features/auth/data/models/student/stundent_model.dart';
+
 class AddTaskRequestModel {
   final String id;
   final String title;
@@ -6,9 +8,8 @@ class AddTaskRequestModel {
   final String tarif;
   final List<String> userIds;
   final String fileType;
-
   final int finishedCount;
-  final List<String> receivedUrl;
+  final List<StudentModel> completedStudents;
 
   AddTaskRequestModel({
     required this.id,
@@ -19,21 +20,23 @@ class AddTaskRequestModel {
     required this.tarif,
     required this.userIds,
     required this.fileType,
-    required this.receivedUrl,
+    required this.completedStudents,
   });
 
+  // Convert instance to JSON
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'date': date,
-        'fileUrl': fileUrl,
-        'finishedCount': finishedCount,
-        'tarif': tarif,
-        'userIds': userIds,
-        'fileType': fileType,
-        'receivedUrl': receivedUrl
-      };
+    'id': id,
+    'title': title,
+    'date': date,
+    'fileUrl': fileUrl,
+    'finishedCount': finishedCount,
+    'tarif': tarif,
+    'userIds': userIds,
+    'fileType': fileType,
+    'completedStudents': completedStudents.map((student) => student.toJson()).toList(),
+  };
 
+  // CopyWith method to create a new instance with updated fields
   AddTaskRequestModel copyWith({
     String? id,
     String? title,
@@ -43,18 +46,19 @@ class AddTaskRequestModel {
     String? fileType,
     int? finishedCount,
     List<String>? userIds,
-    List<String>? receivedUrl,
+    String? receivedUrl,
+    List<StudentModel>? completedStudents,
   }) {
     return AddTaskRequestModel(
       id: id ?? this.id,
-      userIds: userIds ?? this.userIds,
       title: title ?? this.title,
       tarif: tarif ?? this.tarif,
       date: date ?? this.date,
       fileUrl: fileUrl ?? this.fileUrl,
-      finishedCount: finishedCount ?? this.finishedCount,
       fileType: fileType ?? this.fileType,
-      receivedUrl: receivedUrl ?? this.receivedUrl,
+      finishedCount: finishedCount ?? this.finishedCount,
+      userIds: userIds ?? this.userIds,
+      completedStudents: completedStudents ?? this.completedStudents,
     );
   }
 }

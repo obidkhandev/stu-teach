@@ -91,14 +91,12 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
                             print("Success----");
                             print("${state.student.id}");
 
-                            final studentModel =
-                                state.student; // Get the student model
+                            final studentModel = state.student;
 
                             // Update the task model
                             final updatedTaskModel = taskModel.copyWith(
                               finishedCount: taskModel.finishedCount + 1,
                               userIds: [...taskModel.userIds, studentModel.id],
-                              receivedUrl: [...taskModel.receivedUrl, fileUrl],
                             );
 
                             final updatedStudentModel = studentModel.copyWith(
@@ -122,7 +120,7 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
                                 tarif: updatedTaskModel.tarif,
                                 userIds: updatedTaskModel.userIds,
                                 fileType: updatedTaskModel.urlType,
-                                receivedUrl: updatedTaskModel.receivedUrl,
+                                completedStudents: [...updatedTaskModel.completedStudents, updatedStudentModel],
                               ),
                             );
 

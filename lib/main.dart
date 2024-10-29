@@ -52,6 +52,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Stu Teach',
         theme: appTheme,
+
         onGenerateRoute: RouteGenerate().generate,
         navigatorKey: navigatorKey,
         builder: (context, child) {

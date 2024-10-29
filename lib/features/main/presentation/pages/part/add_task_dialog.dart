@@ -157,7 +157,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                                 id: '',
                                 finishedCount: 0,
                                 fileType: fileType,
-                                receivedUrl: [],
+                               completedStudents: []
                               );
 
                               // Access TaskCubit

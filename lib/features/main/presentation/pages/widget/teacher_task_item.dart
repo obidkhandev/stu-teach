@@ -11,11 +11,12 @@ class TaskItem extends StatelessWidget {
   final Function()? onDelete;
   final Function()? onSee;
   final Function()? onUploadFile;
+  final Function()? onSeeUsers;
   final bool isStudent;
   final TaskResponse model;
 
   const TaskItem(
-      {super.key, this.onEdit, this.onDelete, this.onSee, required this.model, required this.isStudent, this.onUploadFile});
+      {super.key, this.onEdit, this.onDelete, this.onSee, required this.model, required this.isStudent, this.onUploadFile, this.onSeeUsers});
 
   @override
   Widget build(BuildContext context) {
@@ -31,22 +32,18 @@ class TaskItem extends StatelessWidget {
               ),
         ),
         const Spacer(),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(50),
-            border: Border.all(color: AppColors.grey3),
-          ),
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: wi(10),
-              vertical: he(5),
+        IconButton.filled(
+          style: IconButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10)
             ),
-            child: Text(
-              model.finishedCount.toString(),
-              style: theme.textTheme.headlineLarge?.copyWith(
-                fontSize: he(14),
-                fontWeight: FontWeight.w400,
-              ),
+          ),
+          onPressed: isStudent? (){} : onSeeUsers,
+          icon: Text(
+            model.finishedCount.toString(),
+            style: theme.textTheme.headlineLarge?.copyWith(
+              fontSize: he(14),
+              fontWeight: FontWeight.w400,
             ),
           ),
         ),
@@ -97,6 +94,7 @@ class TaskItem extends StatelessWidget {
             ),
           ),
         ),
+
         if(isStudent)
           SizedBox(width: wi(15)),
         if(isStudent)

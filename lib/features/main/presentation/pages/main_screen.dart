@@ -13,7 +13,7 @@ import 'package:stu_teach/features/main/presentation/cubit/task/task_cubit.dart'
 import 'package:stu_teach/features/main/presentation/cubit/upload_file/upload_file_cubit.dart';
 import 'package:stu_teach/features/main/presentation/pages/part/add_task_dialog.dart';
 import 'package:stu_teach/features/main/presentation/pages/part/edit_tasks.dart';
-import 'package:stu_teach/features/main/presentation/pages/widget/file_type_widget.dart';
+import 'package:stu_teach/features/main/presentation/pages/part/show_completed_task.dart';
 import 'package:stu_teach/features/main/presentation/pages/widget/teacher_task_item.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -69,6 +69,17 @@ class _MainScreenState extends State<MainScreen> {
                   itemBuilder: (context, index) {
                     return TaskItem(
                       model: state.tasks[index],
+                      onSeeUsers: () {
+                        showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+
+                            builder: (context) {
+                              return ShowCompletedUsers(
+                                taskModel: state.tasks[index],
+                              );
+                            });
+                      },
                       onDelete: () async {
                         await bloc.deleteTask(state.tasks[index].id);
                         await bloc.fetchAllTasks();
@@ -80,6 +91,8 @@ class _MainScreenState extends State<MainScreen> {
 
                         showModalBottomSheet(
                             context: context,
+                            isScrollControlled: true,
+
                             builder: (context) {
                               return EditTaskDialog(model: state.tasks[index]);
                             });
