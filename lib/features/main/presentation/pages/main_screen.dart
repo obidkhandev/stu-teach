@@ -36,6 +36,7 @@ class _MainScreenState extends State<MainScreen> {
     // TODO: implement initState
       context.read<TaskCubit>().fetchAllTasks();
       super.initState();
+
   }
 
   @override
