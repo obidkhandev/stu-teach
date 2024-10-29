@@ -21,6 +21,7 @@ teacherRegisterBottomSheet({required BuildContext context, required AuthCubit bl
     builder: (context) {
       return BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
+          print(state);
           if (state is AuthenticatedState) {
             Navigator.pushNamedAndRemoveUntil(context, AppRoutes.mainScreen, (route) => false);
           }

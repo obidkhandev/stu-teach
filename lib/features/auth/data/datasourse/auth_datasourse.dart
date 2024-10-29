@@ -1,4 +1,6 @@
 import 'package:dartz/dartz.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stu_teach/core/api/list_api.dart';
 import 'package:stu_teach/core/error/failure.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stu_teach/features/auth/data/models/login/request/auth_request_model.dart';
@@ -14,6 +16,9 @@ abstract class AuthDatasource {
 
 class AuthDatasourceImpl extends AuthDatasource {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final SharedPreferences _preferences;
+
+  AuthDatasourceImpl(this._preferences);
 
   @override
   Future<Either<Failure, AuthResponseModel>> login(AuthRequestModel loginRequestModel) async {
@@ -29,6 +34,7 @@ class AuthDatasourceImpl extends AuthDatasource {
         userId: userCredential.user!.uid,
         message: 'Login successful',
       );
+      await _preferences.setString(ListAPI.ACCESS_TOKEN, responseModel.userId);
 
       return Right(responseModel);
     } on FirebaseAuthException catch (e) {
@@ -60,6 +66,9 @@ class AuthDatasourceImpl extends AuthDatasource {
         userId: userCredential.user!.uid,
         message: 'Registration successful',
       );
+
+      await _preferences.setString(ListAPI.ACCESS_TOKEN, responseModel.userId);
+
 
       return Right(responseModel);
     } on FirebaseAuthException catch (e) {

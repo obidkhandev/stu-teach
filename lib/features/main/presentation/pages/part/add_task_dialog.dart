@@ -61,6 +61,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
           }
         },
         builder: (context, fileState) {
+          print(fileState);
           final fileBloc = BlocProvider.of<UploadFileCubit>(context);
           return GestureDetector(
             onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -144,44 +145,54 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                               await fileBloc.selectAndUploadFile();
                             }
 
-                            // Create an instance of AddTaskRequestModel
-                            final taskRequest = AddTaskRequestModel(
-                              title: _nameController.text.trim(),
-                              tarif: _tarifController.text.trim(),
-                              date: selectedDate!.toIso8601String(),
-                              userIds: [],
-                              fileUrl: fileUrl,
-                              id: '',
-                              finishedCount: 0,
-                              fileType: fileType,
-                              receivedUrl: [],
-                            );
+                            if(fileState is UploadFileSuccess){
 
-                            // Access TaskCubit
-                            final taskCubit = BlocProvider.of<TaskCubit>(context);
-
-                            // Add task using TaskCubit
-                            await taskCubit.addTask(taskRequest);
-
-                            // Check the state after adding the task
-                            final taskState = taskCubit.state;
-
-                            if (taskState is TaskAdded) {
-                              fileBloc.reset();
-                              await taskCubit.fetchAllTasks();
-
-                              customToast(
-                                message: "Task added successfully",
-                                bgColor: AppColors.primaryColor,
+                              // Create an instance of AddTaskRequestModel
+                              final taskRequest = AddTaskRequestModel(
+                                title: _nameController.text.trim(),
+                                tarif: _tarifController.text.trim(),
+                                date: selectedDate!.toIso8601String(),
+                                userIds: [],
+                                fileUrl: fileUrl,
+                                id: '',
+                                finishedCount: 0,
+                                fileType: fileType,
+                                receivedUrl: [],
                               );
 
-                              Navigator.of(context).pop(); // Close the dialog
-                            } else if (taskState is TaskError) {
+                              // Access TaskCubit
+                              final taskCubit = BlocProvider.of<TaskCubit>(context);
+
+                              // Add task using TaskCubit
+                              await taskCubit.addTask(taskRequest);
+
+                              // Check the state after adding the task
+                              final taskState = taskCubit.state;
+
+                              if (taskState is TaskAdded) {
+                                fileBloc.reset();
+                                await taskCubit.fetchAllTasks();
+
+                                customToast(
+                                  message: "Task added successfully",
+                                  bgColor: AppColors.primaryColor,
+                                );
+
+                                Navigator.of(context).pop();
+                                // Close the dialog
+                              } else if (taskState is TaskError) {
+                                customToast(
+                                  message: "Failed to add task: ${taskState.failure}",
+                                  bgColor: Colors.red,
+                                );
+                              }
+                            }else{
                               customToast(
-                                message: "Failed to add task: ${taskState.failure}",
+                                message: "Please Waiting",
                                 bgColor: Colors.red,
                               );
                             }
+
                           }
                         }
                       },

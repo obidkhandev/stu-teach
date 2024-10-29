@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stu_teach/core/extension/widget_extantion.dart';
+import 'package:stu_teach/core/routes/app_routes.dart';
 import 'package:stu_teach/core/utils/helper_widget.dart';
 import 'package:stu_teach/core/utils/size_config.dart';
+import 'package:stu_teach/features/auth/presentation/cubit/auth/auth_cubit.dart';
 import 'package:stu_teach/features/common/widget/custom_app_bar.dart';
 import 'package:stu_teach/features/common/widget/custom_button.dart';
 import 'package:stu_teach/features/common/widget/loading_widget.dart';
@@ -22,6 +24,21 @@ class TasksScreen extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         title: "Tasks",
+        action: [
+          IconButton(
+            onPressed: () {
+              context.read<AuthCubit>().logout();
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                AppRoutes.login,
+                    (n) => false,
+              );
+            },
+            icon: const Icon(
+              Icons.logout,
+            ),
+          ),
+        ],
       ),
       body: BlocBuilder<TaskCubit, TaskState>(
         builder: (context, state) {

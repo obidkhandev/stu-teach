@@ -69,7 +69,7 @@ void _repositories() {
 
 void _dataSources() {
   inject.registerLazySingleton<AuthDatasource>(
-    () => AuthDatasourceImpl(),
+    () => AuthDatasourceImpl(inject()),
   );
 
   inject.registerLazySingleton<UploadFileDatasource>(
@@ -81,7 +81,10 @@ void _dataSources() {
   );
 
   inject.registerLazySingleton<StudentDatasource>(
-    () => StudentDatasourceImpl(inject(),FirebaseFirestore.instance, ),
+    () => StudentDatasourceImpl(
+      inject(),
+      FirebaseFirestore.instance,
+    ),
   );
 }
 
@@ -115,6 +118,7 @@ void _cubit() {
         inject(),
         inject(),
         inject(),
+        inject(),
       ));
 
   // Upload file
@@ -124,6 +128,6 @@ void _cubit() {
       StudentCubit(addStudentUseCase: inject(), getStudentUseCase: inject()));
 
   // Upload file
-  inject.registerFactory(
-      () => TaskCubit(inject(), inject(), inject(), inject()));
+  inject
+      .registerFactory(() => TaskCubit(inject(), inject(), inject(), inject()));
 }

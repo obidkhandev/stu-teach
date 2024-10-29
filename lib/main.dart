@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => inject<MainTabCubit>()),
-        BlocProvider(create: (context) => inject<AuthCubit>()),
+        BlocProvider(create: (context) => inject<AuthCubit>()..checkUser()),
         BlocProvider(create: (context) => inject<UploadFileCubit>()),
         BlocProvider(create: (context) => inject<StudentCubit>()),
         BlocProvider(
@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
         builder: (context, child) {
           return ScrollConfiguration(behavior: MyBehavior(), child: child!);
         },
-        initialRoute: AppRoutes.studentLogin,
+        initialRoute: AppRoutes.splashScreen,
       ),
     );
   }

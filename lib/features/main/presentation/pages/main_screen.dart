@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stu_teach/core/extension/widget_extantion.dart';
+import 'package:stu_teach/core/routes/app_routes.dart';
 import 'package:stu_teach/core/utils/helper_widget.dart';
 import 'package:stu_teach/core/utils/size_config.dart';
 import 'package:stu_teach/core/values/app_colors.dart';
+import 'package:stu_teach/features/auth/presentation/cubit/auth/auth_cubit.dart';
 import 'package:stu_teach/features/common/widget/custom_app_bar.dart';
 import 'package:stu_teach/features/common/widget/custom_button.dart';
 import 'package:stu_teach/features/common/widget/loading_widget.dart';
@@ -37,8 +39,23 @@ class _MainScreenState extends State<MainScreen> {
         },
         child: const Icon(Icons.add),
       ),
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         title: 'Main Screen',
+        action: [
+          IconButton(
+            onPressed: () {
+              context.read<AuthCubit>().logout();
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                AppRoutes.login,
+                (n) => false,
+              );
+            },
+            icon: const Icon(
+              Icons.logout,
+            ),
+          ),
+        ],
       ),
       body: BlocBuilder<TaskCubit, TaskState>(
         builder: (context, state) {
@@ -68,12 +85,12 @@ class _MainScreenState extends State<MainScreen> {
                             });
                       },
                       onSee: () async {
-                        final canLaunch =  await canLaunchUrl(
+                        final canLaunch = await canLaunchUrl(
                           Uri.parse(
                             state.tasks[index].fileUrl,
                           ),
                         );
-                        if(canLaunch){
+                        if (canLaunch) {
                           launchUrl(Uri.parse(state.tasks[index].fileUrl));
                         }
                       },

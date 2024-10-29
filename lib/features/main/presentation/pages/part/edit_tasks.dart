@@ -49,7 +49,7 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
   void _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: DateTime.parse(widget.model.date),
       firstDate: DateTime.now(),
       lastDate: DateTime(2101),
     );
@@ -64,157 +64,151 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
   Widget build(BuildContext context) {
     return FadeInUp(
       duration: const Duration(milliseconds: 500),
-      child: BlocConsumer<UploadFileCubit, UploadFileState>(
-        listener: (context, fileState) {
-          if (fileState is UploadFileInitial) {
-            context
-                .read<UploadFileCubit>()
-                .setUrl(fileUrl, widget.model.urlType);
-          }
-          if (fileState is UploadFileSuccess) {
-            debugPrint('File uploaded successfully: ${fileState.url}');
-          } else if (fileState is UploadFileFailure) {
-            debugPrint('Upload failed: ${fileState.failure}');
-          }
-        },
-        builder: (context, fileState) {
-          final fileBloc = context.read<UploadFileCubit>();
-          return GestureDetector(
-            onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(20).copyWith(
-                bottom: MediaQuery.of(context).viewInsets.bottom + 10,
-              ),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text(
-                      "Add Task",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                      ),
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<UploadFileCubit, UploadFileState>(
+            listener: (context, fileState) {
+              if (fileState is UploadFileSuccess) {
+                setState(() {
+                  fileUrl = fileState.url;
+                });
+                customToast(
+                    message: "File uploaded successfully",
+                    bgColor: AppColors.primaryColor);
+              } else if (fileState is UploadFileFailure) {
+                customToast(
+                    message: "Upload failed: ${fileState.failure}",
+                    bgColor: Colors.red);
+              }
+            },
+          ),
+          BlocListener<TaskCubit, TaskState>(
+            listener: (context, taskState) {
+              if (taskState is TaskEdited) {
+                context.read<UploadFileCubit>().reset();
+                context.read<TaskCubit>().fetchAllTasks();
+                customToast(
+                    message: "Task edited successfully",
+                    bgColor: AppColors.primaryColor);
+                Navigator.of(context).pop();
+              } else if (taskState is TaskError) {
+                customToast(
+                    message: "Failed to edit task: ${taskState.failure}",
+                    bgColor: Colors.red);
+              }
+            },
+          ),
+        ],
+        child: GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(20).copyWith(
+              bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+            ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    "Edit Task",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
                     ),
-                    const SizedBox(height: 10),
-                    CustomTextField(
-                      hintText: "Enter task name",
-                      textEditingController: _nameController,
-                      textInputType: TextInputType.text,
-                      label: "Task Name",
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter the task name';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 10),
-                    CustomTextField(
-                      hintText: "Enter tarif",
-                      textEditingController: _tarifController,
-                      textInputType: TextInputType.text,
-                      label: "Tarif",
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter the tarif';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: CustomButton(
-                            text: selectedDate != null
-                                ? "Date: ${selectedDate!.toLocal().toString().split(' ')[0]}"
-                                : "Select Date",
-                            onTap: () => _selectDate(context),
-                          ),
+                  ),
+                  const SizedBox(height: 10),
+                  CustomTextField(
+                    hintText: "Enter task name",
+                    textEditingController: _nameController,
+                    textInputType: TextInputType.text,
+                    label: "Task Name",
+                    validator: (value) => value?.isEmpty == true
+                        ? 'Please enter the task name'
+                        : null,
+                  ),
+                  const SizedBox(height: 10),
+                  CustomTextField(
+                    hintText: "Enter tarif",
+                    textEditingController: _tarifController,
+                    textInputType: TextInputType.text,
+                    label: "Tarif",
+                    validator: (value) => value?.isEmpty == true
+                        ? 'Please enter the tarif'
+                        : null,
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CustomButton(
+                          text: selectedDate != null
+                              ? "Date: ${selectedDate!.toLocal().toString().split(' ')[0]}"
+                              : "Select Date",
+                          onTap: () => _selectDate(context),
                         ),
-                        const SizedBox(width: 20),
-                        Expanded(
-                          child: CustomButton(
-                            text: fileState is UploadFileSuccess
-                                ? "File Uploaded"
-                                : "Upload File",
-                            isLoading: fileState is UploadFileLoading,
-                            onTap: () => fileBloc.selectAndUploadFile(),
-                          ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    CustomButton(
-                      text: "Edit Task",
-                      onTap: () async {
-                        if (_formKey.currentState?.validate() == true) {
-                          if (selectedDate == null) {
-                            customToast(
-                                message: "Please select a date",
-                                bgColor: Colors.red);
-                          } else {
-                            // if (fileState is UploadFileInitial) {
-                            //   await fileBloc.selectAndUploadFile();
-                            // }
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: CustomButton(
+                          text: fileUrl.isNotEmpty
+                              ? "File Uploaded"
+                              : "Upload File",
+                          isLoading: context.watch<UploadFileCubit>().state
+                              is UploadFileLoading,
+                          onTap: () => context
+                              .read<UploadFileCubit>()
+                              .selectAndUploadFile(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  BlocBuilder<UploadFileCubit, UploadFileState>(
+                    builder: (context, state) {
+                      return CustomButton(
+                        text: "Edit Task",
+                        onTap: () async {
+                          if (_formKey.currentState?.validate() == true) {
+                            if (selectedDate == null) {
+                              customToast(
+                                  message: "Please select a date",
+                                  bgColor: Colors.red);
+                            } else {
+                              if (state is UploadFileSuccess) {
+                                final taskRequest = AddTaskRequestModel(
+                                  title: _nameController.text.trim(),
+                                  tarif: _tarifController.text.trim(),
+                                  date: selectedDate!.toIso8601String(),
+                                  userIds: widget.model.userIds,
+                                  fileUrl: state.url,
+                                  id: widget.model.id,
+                                  finishedCount: widget.model.finishedCount,
+                                  fileType: state.fileType,
+                                  receivedUrl: widget.model.receivedUrl,
+                                );
 
-                            // Create an instance of AddTaskRequestModel
-                            final taskRequest = AddTaskRequestModel(
-                              title: _nameController.text.trim(),
-                              tarif: _tarifController.text.trim(),
-                              date: selectedDate!.toIso8601String(),
-                              userIds: [],
-                              // Assuming you want to send date as a string
-                              fileUrl: fileState is UploadFileSuccess
-                                  ? fileState.url
-                                  : '',
-                              id: '',
-                              finishedCount: 0,
-                              fileType: fileType,
-                              receivedUrl: widget.model
-                                  .receivedUrl, // Include uploaded file URL if available
-                            );
-
-                            // Access TaskCubit
-                            final taskCubit =
-                                BlocProvider.of<TaskCubit>(context);
-
-                            // Add task using TaskCubit
-                            await taskCubit.editTask(
-                                widget.model.id, taskRequest);
-
-                            // You can also listen to the state and show a success or failure message if needed
-                            taskCubit.stream.listen((state) async {
-                              if (state is TaskEdited) {
-                                fileBloc.reset();
-                                await taskCubit.fetchAllTasks();
-
+                                // Edit task using TaskCubit
+                                context
+                                    .read<TaskCubit>()
+                                    .editTask(widget.model.id, taskRequest);
+                              } else {
                                 customToast(
-                                    message: "Task edited successfully",
-                                    bgColor: AppColors.primaryColor);
-                                Navigator.of(context).pop();
-
-                                // Close the dialog
-                              } else if (state is TaskError) {
-                                customToast(
-                                  message:
-                                      "Failed to edited task: ${state.failure}",
+                                  message: "Please waiting",
                                   bgColor: Colors.red,
                                 );
                               }
-                            });
+                            }
                           }
-                        }
-                      },
-                    ),
-                  ],
-                ),
+                        },
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }
