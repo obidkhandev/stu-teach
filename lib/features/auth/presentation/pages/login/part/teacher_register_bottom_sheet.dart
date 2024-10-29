@@ -18,10 +18,11 @@ teacherRegisterBottomSheet({required BuildContext context, required AuthCubit bl
 
   return showModalBottomSheet(
     context: context,
+    isScrollControlled: true,
     builder: (context) {
       return BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
-          print(state);
+
           if (state is AuthenticatedState) {
             Navigator.pushNamedAndRemoveUntil(context, AppRoutes.mainScreen, (route) => false);
           }
@@ -30,66 +31,73 @@ teacherRegisterBottomSheet({required BuildContext context, required AuthCubit bl
           }
         },
         builder: (context, state) {
-          return FadeInUp(
-            child: Form(
-              key: formKey, // Attach form key
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 30),
-                child: Column(
-                  children: [
-                    Text(
-                      "Register Bottom sheet",
-                      style: Theme.of(context).textTheme.bodyLarge,
+          return DraggableScrollableSheet(
+              initialChildSize: 0.64,
+              maxChildSize: 0.64,
+              expand: false,
+              builder: (_,controller) {
+              return FadeInUp(
+                child: Form(
+                  key: formKey, // Attach form key
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 30),
+                    child: Column(
+                      children: [
+                        Text(
+                          "Register Teacher",
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        CustomTextField(
+                          hintText: "",
+                          textEditingController: emailController,
+                          textInputType: TextInputType.emailAddress,
+                          label: "Enter email",
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter an email';
+                            }
+                            final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$');
+                            if (!emailRegex.hasMatch(value)) {
+                              return 'Please enter a valid email';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: he(10)),
+                        CustomTextField(
+                          hintText: "",
+                          textEditingController: passwordController,
+                          textInputType: TextInputType.text,
+                          label: "Enter password",
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a password';
+                            }
+                            if (value.length < 6) {
+                              return 'Password must be at least 6 characters';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: he(10)),
+                        CustomButton(
+                          text: "Register",
+                          isLoading: state is AuthLoadingState,
+                          onTap: () async {
+                            if (formKey.currentState?.validate() ?? false) {
+                           await  bloc.registerUser(
+                                 emailController.text,
+                                 passwordController.text,
+                              );
+                            }
+                          },
+                        ),
+                      ],
                     ),
-                    CustomTextField(
-                      hintText: "",
-                      textEditingController: emailController,
-                      textInputType: TextInputType.emailAddress,
-                      label: "Enter email",
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter an email';
-                        }
-                        final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$');
-                        if (!emailRegex.hasMatch(value)) {
-                          return 'Please enter a valid email';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: he(10)),
-                    CustomTextField(
-                      hintText: "",
-                      textEditingController: passwordController,
-                      textInputType: TextInputType.text,
-                      label: "Enter password",
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a password';
-                        }
-                        if (value.length < 6) {
-                          return 'Password must be at least 6 characters';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: he(10)),
-                    CustomButton(
-                      text: "Register",
-                      isLoading: state is AuthLoadingState,
-                      onTap: () async {
-                        if (formKey.currentState?.validate() ?? false) {
-                       await  bloc.registerUser(
-                             emailController.text,
-                             passwordController.text,
-                          );
-                        }
-                      },
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            }
           );
         },
       );

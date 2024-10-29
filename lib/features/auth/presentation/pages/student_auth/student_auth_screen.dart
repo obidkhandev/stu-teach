@@ -70,6 +70,7 @@ class _StudentAuthScreenState extends State<StudentAuthScreen> {
         builder: (context, state) {
           final bloc = context.read<AuthCubit>();
           return Scaffold(
+            resizeToAvoidBottomInset: true,
             body: SingleChildScrollView(
               child: Column(
                 children: [

@@ -4,8 +4,11 @@ import 'package:stu_teach/core/extension/widget_extantion.dart';
 import 'package:stu_teach/core/routes/app_routes.dart';
 import 'package:stu_teach/core/utils/helper_widget.dart';
 import 'package:stu_teach/core/utils/size_config.dart';
+import 'package:stu_teach/core/values/app_assets.dart';
 import 'package:stu_teach/core/values/app_colors.dart';
+import 'package:stu_teach/di.dart';
 import 'package:stu_teach/features/auth/presentation/cubit/auth/auth_cubit.dart';
+import 'package:stu_teach/features/auth/presentation/pages/login/part/custom_dialog.dart';
 import 'package:stu_teach/features/common/widget/custom_app_bar.dart';
 import 'package:stu_teach/features/common/widget/custom_button.dart';
 import 'package:stu_teach/features/common/widget/loading_widget.dart';
@@ -27,6 +30,14 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+
+    @override
+  void initState() {
+    // TODO: implement initState
+      context.read<TaskCubit>().fetchAllTasks();
+      super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +61,7 @@ class _MainScreenState extends State<MainScreen> {
               Navigator.pushNamedAndRemoveUntil(
                 context,
                 AppRoutes.login,
-                (n) => false,
+                    (n) => false,
               );
             },
             icon: const Icon(
@@ -65,64 +76,70 @@ class _MainScreenState extends State<MainScreen> {
           if (state is TaskLoaded) {
             return state.tasks.isEmpty
                 ? const CustomEmptyWidget(
-                    title: "Empty Task",
-                    subTitle: "Tasks is empty",
-                  )
+              title: "Empty Task",
+              subTitle: "Tasks is empty",
+            )
                 : Column(
-                    children: [
-                      ListView.separated(
-                        itemCount: state.tasks.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return TaskItem(
-                            model: state.tasks[index],
-                            onSeeUsers: () {
-                              showModalBottomSheet(
-                                  context: context,
-                                  isScrollControlled: true,
-                                  builder: (context) {
-                                    return ShowCompletedUsers(
-                                      taskModel: state.tasks[index],
-                                    );
-                                  });
-                            },
-                            onDelete: () async {
-                              await bloc.deleteTask(state.tasks[index].id);
-                              await bloc.fetchAllTasks();
-                            },
-                            onEdit: () async {
-                              context.read<UploadFileCubit>().setUrl(
-                                  state.tasks[index].fileUrl,
-                                  state.tasks[index].urlType);
+              children: [
+                ListView.separated(
+                  itemCount: state.tasks.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return TaskItem(
+                      model: state.tasks[index],
+                      onSeeUsers: () {
+                        if (state.tasks[index].completedStudents.isNotEmpty) {
+                          showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              builder: (context) {
+                                return ShowCompletedUsers(
+                                  taskModel: state.tasks[index],
+                                );
+                              });
+                        } else {
+                          customDialog(context, "It's empty",
+                              "No one has done this task yet",
+                              AppIcons.icError);
+                        }
+                      },
+                      onDelete: () async {
+                        await bloc.deleteTask(state.tasks[index].id);
+                        await bloc.fetchAllTasks();
+                      },
+                      onEdit: () async {
+                        context.read<UploadFileCubit>().setUrl(
+                            state.tasks[index].fileUrl,
+                            state.tasks[index].urlType);
 
-                              showModalBottomSheet(
-                                  context: context,
-                                  isScrollControlled: true,
-                                  builder: (context) {
-                                    return EditTaskDialog(
-                                        model: state.tasks[index]);
-                                  });
-                            },
-                            onSee: () async {
-                              final canLaunch = await canLaunchUrl(
-                                Uri.parse(
-                                  state.tasks[index].fileUrl,
-                                ),
-                              );
-                              if (canLaunch) {
-                                launchUrl(
-                                    Uri.parse(state.tasks[index].fileUrl));
-                              }
-                            },
-                            isStudent: false,
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return customDivider;
-                        },
-                      ),
-                    ],
-                  );
+                        showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (context) {
+                              return EditTaskDialog(
+                                  model: state.tasks[index]);
+                            });
+                      },
+                      onSee: () async {
+                        final canLaunch = await canLaunchUrl(
+                          Uri.parse(
+                            state.tasks[index].fileUrl,
+                          ),
+                        );
+                        if (canLaunch) {
+                          launchUrl(
+                              Uri.parse(state.tasks[index].fileUrl));
+                        }
+                      },
+                      isStudent: false,
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return customDivider;
+                  },
+                ),
+              ],
+            );
           } else if (state is TaskLoading) {
             return const LoadingWidget();
           } else if (state is TaskError) {

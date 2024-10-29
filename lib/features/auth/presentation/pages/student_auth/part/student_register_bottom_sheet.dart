@@ -25,126 +25,135 @@ studentRegisterBottomSheet({required BuildContext context}) {
     context: context,
     isScrollControlled: true,
     builder: (context) {
-      return BlocConsumer<AuthCubit, AuthState>(
-        listener: (context, state) {
-          if (state is AuthenticatedState) {
-            final student = StudentModel(
-              id: '',
-              name: nameController.text,
-              email: emailController.text,
-              password: passwordController.text,
-              completedTasksIds: [],
+      return Padding(
+        padding:  EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 40),
+        child: BlocConsumer<AuthCubit, AuthState>(
+          listener: (context, state) {
+            if (state is AuthenticatedState) {
+              final student = StudentModel(
+                id: '',
+                name: nameController.text,
+                email: emailController.text,
+                password: passwordController.text,
+                completedTasksIds: [],
+              );
+              context.read<StudentCubit>().addStudent(student);
+              Navigator.pushNamedAndRemoveUntil(
+                  context, AppRoutes.studentMainScreen, (route) => false);
+            }
+            if (state is AuthErrorState) {
+              customDialog(context, 'Try again or check Internet', state.message,
+                  AppIcons.icError);
+            }
+          },
+          builder: (context, state) {
+            final bloc = context.read<AuthCubit>();
+            return DraggableScrollableSheet(
+              initialChildSize: 0.85,
+              maxChildSize: 0.85,
+              expand: false,
+              builder: (_,controller){
+                return FadeInUp(
+                  child: Form(
+                    key: formKey, // Attach form key
+                    child: Padding(
+                      padding:  EdgeInsets.symmetric(vertical: he(14),horizontal: wi(16)),
+                      child: Column(
+                        children: [
+                          Text(
+                            "Student register",
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                          SizedBox(height: he(10)),
+                          CustomTextField(
+                            hintText: "",
+                            textEditingController: nameController,
+                            textInputType: TextInputType.text,
+                            label: "Enter name",
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter a name';
+                              }
+                              if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
+                                return 'Name should contain only letters';
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(height: he(10)),
+                          CustomTextField(
+                            hintText: "",
+                            textEditingController: surnameController,
+                            textInputType: TextInputType.text,
+                            label: "Enter surname",
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter a surname';
+                              }
+                              if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
+                                return 'Surname should contain only letters';
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(height: he(10)),
+                          CustomTextField(
+                            hintText: "",
+                            textEditingController: emailController,
+                            textInputType: TextInputType.emailAddress,
+                            label: "Enter email",
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter an email';
+                              }
+                              final emailRegex =
+                              RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$');
+                              if (!emailRegex.hasMatch(value)) {
+                                return 'Please enter a valid email';
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(height: he(10)),
+                          CustomTextField(
+                            hintText: "",
+                            textEditingController: passwordController,
+                            textInputType: TextInputType.text,
+                            label: "Enter password",
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter a password';
+                              }
+                              if (value.length < 6) {
+                                return 'Password must be at least 6 characters';
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(height: he(10)),
+                          CustomButton(
+                            bgColor: AppColors.secondary,
+                            text: "Register",
+                            isLoading: state is AuthLoadingState,
+                            onTap: () async {
+                              if (formKey.currentState?.validate() ?? false) {
+                                await bloc.registerUser(
+                                  emailController.text,
+                                  passwordController.text,
+                                );
+                              }
+                            },
+                          ),
+                          SizedBox(height: he(30)),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
             );
-            context.read<StudentCubit>().addStudent(student);
-            Navigator.pushNamedAndRemoveUntil(
-                context, AppRoutes.studentMainScreen, (route) => false);
-          }
-          if (state is AuthErrorState) {
-            customDialog(context, 'Try again or check Internet', state.message,
-                AppIcons.icError);
-          }
-        },
-        builder: (context, state) {
-          final bloc = context.read<AuthCubit>();
-          return FadeInUp(
-            child: Form(
-              key: formKey, // Attach form key
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30)
-                    .copyWith(bottom: MediaQuery.of(context).padding.bottom),
-                child: Column(
-                  children: [
-                    Text(
-                      "Student register",
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    SizedBox(height: he(10)),
-                    CustomTextField(
-                      hintText: "",
-                      textEditingController: nameController,
-                      textInputType: TextInputType.text,
-                      label: "Enter name",
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a name';
-                        }
-                        if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
-                          return 'Name should contain only letters';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: he(10)),
-                    CustomTextField(
-                      hintText: "",
-                      textEditingController: surnameController,
-                      textInputType: TextInputType.text,
-                      label: "Enter surname",
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a surname';
-                        }
-                        if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
-                          return 'Surname should contain only letters';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: he(10)),
-                    CustomTextField(
-                      hintText: "",
-                      textEditingController: emailController,
-                      textInputType: TextInputType.emailAddress,
-                      label: "Enter email",
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter an email';
-                        }
-                        final emailRegex =
-                            RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$');
-                        if (!emailRegex.hasMatch(value)) {
-                          return 'Please enter a valid email';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: he(10)),
-                    CustomTextField(
-                      hintText: "",
-                      textEditingController: passwordController,
-                      textInputType: TextInputType.text,
-                      label: "Enter password",
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a password';
-                        }
-                        if (value.length < 6) {
-                          return 'Password must be at least 6 characters';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: he(10)),
-                    CustomButton(
-                      bgColor: AppColors.secondary,
-                      text: "Register",
-                      isLoading: state is AuthLoadingState,
-                      onTap: () async {
-                        if (formKey.currentState?.validate() ?? false) {
-                          await bloc.registerUser(
-                            emailController.text,
-                            passwordController.text,
-                          );
-                        }
-                      },
-                    ),
-                    SizedBox(height: he(30)),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
+          },
+        ),
       );
     },
   );
