@@ -60,7 +60,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ? ScaleButton(
                         bound: 0.1,
                         onTap: rightOnTap,
-                        child: SvgPicture.asset(rightIcon ?? AppIcons.ic1st))
+                        child: SvgPicture.asset(rightIcon ?? AppIcons.icArrowRight))
                     .paddingOnly(right: wi(16))
                 : const SizedBox.shrink(),
           ],

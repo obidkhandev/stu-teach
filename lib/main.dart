@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
         builder: (context, child) {
           return ScrollConfiguration(behavior: MyBehavior(), child: child!);
         },
-        initialRoute: AppRoutes.mainScreen,
+        initialRoute: AppRoutes.splashScreen,
       ),
 
     );

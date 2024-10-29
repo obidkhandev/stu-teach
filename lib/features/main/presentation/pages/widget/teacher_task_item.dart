@@ -100,6 +100,8 @@ class TaskItem extends StatelessWidget {
           onPressed: isStudent? () {} : onSeeUsers,
           child: Text(
             model.finishedCount.toString(),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: theme.textTheme.headlineLarge?.copyWith(
               color: isStudent ? AppColors.secondary : AppColors.primaryColor,
               fontWeight: FontWeight.w600,
@@ -107,7 +109,6 @@ class TaskItem extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(width: wi(6)),
         if (!isStudent)
           iconButton(
             onPressed: onEdit,

@@ -11,7 +11,7 @@ class NoInternetScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: CustomEmptyWidget(
-          icon: AppIcons.icNoImg,
+          icon: AppIcons.icEmpty,
           title: "Internet Error",
           subTitle: 'No connection internet',
          ),
