@@ -20,6 +20,7 @@ class AppIcons {
   static const String icError = 'assets/icons/ic_error.svg';
   static const String icEdit = 'assets/icons/edit-edit-3.svg';
   static const String icDelete = 'assets/icons/delete-delete.svg';
+  static const String icEmpty = 'assets/icons/ic_empty.svg';
   // static const String icFlash = 'assets/icons/ic_menu.svg';
 
 }

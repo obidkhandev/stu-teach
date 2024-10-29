@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stu_teach/core/extension/widget_extantion.dart';
 import 'package:stu_teach/core/routes/app_routes.dart';
@@ -10,7 +9,6 @@ import 'package:stu_teach/features/auth/presentation/cubit/auth/auth_cubit.dart'
 import 'package:stu_teach/features/auth/presentation/cubit/auth/auth_state.dart';
 import 'package:stu_teach/features/auth/presentation/pages/login/part/custom_dialog.dart';
 import 'package:stu_teach/features/auth/presentation/pages/student_auth/part/student_register_bottom_sheet.dart';
-import 'package:stu_teach/features/common/widget/custom_app_bar.dart';
 import 'package:stu_teach/features/common/widget/custom_button.dart';
 import 'package:stu_teach/features/common/widget/text_field_widget.dart';
 
@@ -79,6 +77,8 @@ class _StudentAuthScreenState extends State<StudentAuthScreen> {
                     AppImages.imgHandPhone,
                     width: double.infinity,
                     fit: BoxFit.fitWidth,
+                    color: AppColors.secondary,
+                    // color: ,
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: wi(12)),
@@ -142,7 +142,7 @@ class _StudentAuthScreenState extends State<StudentAuthScreen> {
                             child: Text(
                               "I am a teacher",
                               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                color: AppColors.primaryColor,
+                                color: AppColors.secondary,
                                 decoration: TextDecoration.underline,
                               ),
                             ),
@@ -153,6 +153,7 @@ class _StudentAuthScreenState extends State<StudentAuthScreen> {
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.6,
                                 child: CustomButton(
+                                  bgColor: AppColors.secondary,
                                   text: "Ro'yhatdan o'tish",
                                   onTap: () {
                                     studentRegisterBottomSheet(
@@ -163,6 +164,7 @@ class _StudentAuthScreenState extends State<StudentAuthScreen> {
                               SizedBox(width: wi(15)),
                               Expanded(
                                 child: CustomButton(
+                                  bgColor: AppColors.secondary,
                                   text: "Kirish",
                                   isLoading: state is AuthLoadingState,
                                   onTap: () {

@@ -2,14 +2,12 @@ import 'package:animate_do/animate_do.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stu_teach/core/api/api.dart';
 import 'package:stu_teach/core/routes/app_routes.dart';
 import 'package:stu_teach/core/services/app_version/app_update_service.dart';
 import 'package:stu_teach/core/utils/helper_widget.dart';
 import 'package:stu_teach/core/utils/size_config.dart';
-import 'package:stu_teach/core/values/app_assets.dart';
 import 'package:stu_teach/core/values/app_colors.dart';
 import 'package:stu_teach/di.dart';
 import 'package:stu_teach/features/auth/presentation/cubit/auth/auth_cubit.dart';
@@ -46,9 +44,9 @@ class _SplashScreenState extends State<SplashScreen> {
                     (route) => false,
                   );
                 } else {
-                  SharedPreferences _pref =
+                  SharedPreferences pref =
                       await SharedPreferences.getInstance();
-                  var result = _pref.getString(ListAPI.userID);
+                  var result = pref.getString(ListAPI.userID);
                   print("$result :Result id--");
                   if (result!.isNotEmpty && state is AuthenticatedState) {
                     return Navigator.pushNamedAndRemoveUntil(

@@ -38,7 +38,7 @@ class CustomEmptyWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SvgPicture.asset(icon ?? AppIcons.ic1st),
+                SvgPicture.asset(icon ?? AppIcons.icEmpty,width: wi(60),height: he(60),),
                 SizedBox(height: he(18)),
                 Text(title, style: Theme.of(context).textTheme.headlineLarge),
                buttonText == null ?SizedBox(height: he(4)) : SizedBox(height: he(18)),

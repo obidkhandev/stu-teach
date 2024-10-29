@@ -53,7 +53,7 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> checkUser() async {
     emit(const AuthLoadingState());
     var result = await checkUserToAuthUseCase.call(NoParams());
-    print("${result} Result from cubit");
+    print("$result Result from cubit");
 
     result.fold(
       (failure) =>

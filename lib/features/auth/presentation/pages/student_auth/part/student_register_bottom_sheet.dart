@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stu_teach/core/routes/app_routes.dart';
 import 'package:stu_teach/core/utils/size_config.dart';
 import 'package:stu_teach/core/values/app_assets.dart';
+import 'package:stu_teach/core/values/app_colors.dart';
 import 'package:stu_teach/features/auth/data/models/student/stundent_model.dart';
 import 'package:stu_teach/features/auth/presentation/cubit/auth/auth_cubit.dart';
 import 'package:stu_teach/features/auth/presentation/cubit/auth/auth_state.dart';
@@ -18,7 +19,7 @@ studentRegisterBottomSheet({required BuildContext context}) {
   TextEditingController nameController = TextEditingController();
   TextEditingController surnameController = TextEditingController();
 
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   return showModalBottomSheet(
     context: context,
@@ -47,9 +48,9 @@ studentRegisterBottomSheet({required BuildContext context}) {
           final bloc = context.read<AuthCubit>();
           return FadeInUp(
             child: Form(
-              key: _formKey, // Attach form key
+              key: formKey, // Attach form key
               child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30)
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30)
                     .copyWith(bottom: MediaQuery.of(context).padding.bottom),
                 child: Column(
                   children: [
@@ -125,10 +126,11 @@ studentRegisterBottomSheet({required BuildContext context}) {
                     ),
                     SizedBox(height: he(10)),
                     CustomButton(
+                      bgColor: AppColors.secondary,
                       text: "Register",
                       isLoading: state is AuthLoadingState,
                       onTap: () async {
-                        if (_formKey.currentState?.validate() ?? false) {
+                        if (formKey.currentState?.validate() ?? false) {
                           await bloc.registerUser(
                             emailController.text,
                             passwordController.text,

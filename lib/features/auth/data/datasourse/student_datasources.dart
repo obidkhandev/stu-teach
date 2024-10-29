@@ -4,8 +4,6 @@ import 'package:stu_teach/core/api/list_api.dart';
 import 'package:stu_teach/core/error/failure.dart';
 import 'package:stu_teach/features/auth/data/models/student/stundent_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dartz/dartz.dart';
-import 'package:stu_teach/core/error/failure.dart';
 // import 'package:stu_teach/features/auth/data/models/student/student_model.dart';
 
 
@@ -56,7 +54,7 @@ class StudentDatasourceImpl implements StudentDatasource {
 
       String? id =  preferences.getString(ListAPI.userID);
 
-      print("\n------ID: ${id}---\n\n\n");
+      print("\n------ID: $id---\n\n\n");
 
       DocumentSnapshot<Map<String, dynamic>> docSnapshot =
       await _firestore.collection('students').doc(id).get();

@@ -17,6 +17,8 @@ import 'package:stu_teach/features/main/presentation/pages/part/show_completed_t
 import 'package:stu_teach/features/main/presentation/pages/widget/teacher_task_item.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../common/widget/custom_empty_widget.dart';
+
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
@@ -40,7 +42,7 @@ class _MainScreenState extends State<MainScreen> {
         child: const Icon(Icons.add),
       ),
       appBar: CustomAppBar(
-        title: 'Main Screen',
+        title: 'Teacher Main',
         action: [
           IconButton(
             onPressed: () {
@@ -61,61 +63,66 @@ class _MainScreenState extends State<MainScreen> {
         builder: (context, state) {
           final bloc = context.read<TaskCubit>();
           if (state is TaskLoaded) {
-            return Column(
-              children: [
-                ListView.separated(
-                  itemCount: state.tasks.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return TaskItem(
-                      model: state.tasks[index],
-                      onSeeUsers: () {
-                        showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
+            return state.tasks.isEmpty
+                ? const CustomEmptyWidget(
+                    title: "Empty Task",
+                    subTitle: "Tasks is empty",
+                  )
+                : Column(
+                    children: [
+                      ListView.separated(
+                        itemCount: state.tasks.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return TaskItem(
+                            model: state.tasks[index],
+                            onSeeUsers: () {
+                              showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  builder: (context) {
+                                    return ShowCompletedUsers(
+                                      taskModel: state.tasks[index],
+                                    );
+                                  });
+                            },
+                            onDelete: () async {
+                              await bloc.deleteTask(state.tasks[index].id);
+                              await bloc.fetchAllTasks();
+                            },
+                            onEdit: () async {
+                              context.read<UploadFileCubit>().setUrl(
+                                  state.tasks[index].fileUrl,
+                                  state.tasks[index].urlType);
 
-                            builder: (context) {
-                              return ShowCompletedUsers(
-                                taskModel: state.tasks[index],
+                              showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  builder: (context) {
+                                    return EditTaskDialog(
+                                        model: state.tasks[index]);
+                                  });
+                            },
+                            onSee: () async {
+                              final canLaunch = await canLaunchUrl(
+                                Uri.parse(
+                                  state.tasks[index].fileUrl,
+                                ),
                               );
-                            });
-                      },
-                      onDelete: () async {
-                        await bloc.deleteTask(state.tasks[index].id);
-                        await bloc.fetchAllTasks();
-                      },
-                      onEdit: () async {
-                        context.read<UploadFileCubit>().setUrl(
-                            state.tasks[index].fileUrl,
-                            state.tasks[index].urlType);
-
-                        showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-
-                            builder: (context) {
-                              return EditTaskDialog(model: state.tasks[index]);
-                            });
-                      },
-                      onSee: () async {
-                        final canLaunch = await canLaunchUrl(
-                          Uri.parse(
-                            state.tasks[index].fileUrl,
-                          ),
-                        );
-                        if (canLaunch) {
-                          launchUrl(Uri.parse(state.tasks[index].fileUrl));
-                        }
-                      },
-                      isStudent: false,
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return customDivider;
-                  },
-                ),
-              ],
-            );
+                              if (canLaunch) {
+                                launchUrl(
+                                    Uri.parse(state.tasks[index].fileUrl));
+                              }
+                            },
+                            isStudent: false,
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return customDivider;
+                        },
+                      ),
+                    ],
+                  );
           } else if (state is TaskLoading) {
             return const LoadingWidget();
           } else if (state is TaskError) {

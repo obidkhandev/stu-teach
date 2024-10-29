@@ -2,7 +2,6 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stu_teach/core/values/app_colors.dart';
-import 'package:stu_teach/di.dart';
 import 'package:stu_teach/features/common/widget/custom_button.dart';
 import 'package:stu_teach/features/common/widget/custom_toast.dart';
 import 'package:stu_teach/features/common/widget/text_field_widget.dart';

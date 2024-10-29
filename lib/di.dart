@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:stu_teach/core/api/dio_client.dart';
 import 'package:stu_teach/core/utils/pref_manager.dart';
 import 'package:stu_teach/features/auth/data/datasourse/auth_datasourse.dart';
 import 'package:stu_teach/features/auth/data/datasourse/student_datasources.dart';
@@ -40,8 +39,6 @@ Future<void> initDi() async {
 
   inject.registerSingleton<SharedPreferences>(pref);
 
-  // Register other dependencies
-  inject.registerSingleton<DioClient>(DioClient(pref));
   initPrefManager(pref);
   _dataSources();
   _repositories();

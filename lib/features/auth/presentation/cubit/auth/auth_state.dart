@@ -49,7 +49,7 @@ class UnAuthenticatedState extends AuthState {
 // Error State
 class AuthErrorState extends AuthState {
   const AuthErrorState({
-    required String message,
-    required Failure failure,
-  }) : super(message: message, failure: failure);
+    required super.message,
+    required super.failure,
+  });
 }

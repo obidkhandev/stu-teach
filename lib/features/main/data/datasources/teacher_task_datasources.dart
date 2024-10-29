@@ -49,6 +49,7 @@ class TaskDatasourceImpl implements TaskDatasource {
     }
   }
 
+  @override
   Future<Either<Failure, void>> editTask(String taskId, AddTaskRequestModel request) async {
     try {
       await firestore.collection('tasks').doc(taskId).update(request.toJson());
@@ -58,6 +59,7 @@ class TaskDatasourceImpl implements TaskDatasource {
     }
   }
 
+  @override
   Future<Either<Failure, void>> deleteTask(String taskId) async {
     try {
       await firestore.collection('tasks').doc(taskId).delete();

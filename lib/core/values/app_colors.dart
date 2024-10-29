@@ -16,10 +16,10 @@ class AppColors {
   static const cEEEE = Color(0xffEEEEEE);
   static const green = Color(0xff36D488);
 
+
   static const grey4 = Color(0xFF393F48);
   static const dividerColor = Color(0xFFD7D8DD);
-  static const secondary = Color(0xFFF1F1F1);
   static const secondary2 = Color(0xFFF8F8FA);
-  static const cff8989 = Color(0xFFFF8989);
+  static const secondary = Color(0xFFFF8989);
   static const c964A4A = Color(0xFF964A4A);
 }

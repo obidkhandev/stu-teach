@@ -40,12 +40,12 @@ class UploadFileCubit extends Cubit<UploadFileState> {
         );
       } else {
         // User canceled the picker or an error occurred
-        emit(UploadFileFailure(ServerFailure(500)));
+        emit(UploadFileFailure(const ServerFailure(500)));
       }
     } else if (status.isDenied) {
-      emit(UploadFileFailure(ServerFailure(500)));
+      emit(UploadFileFailure(const ServerFailure(500)));
     } else if (status.isPermanentlyDenied) {
-      emit(UploadFileFailure(ServerFailure(500)));
+      emit(UploadFileFailure(const ServerFailure(500)));
     }
   }
 

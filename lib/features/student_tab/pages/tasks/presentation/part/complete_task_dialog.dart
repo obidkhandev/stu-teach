@@ -89,7 +89,7 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
 
                           if (state is StudentSuccess) {
                             print("Success----");
-                            print("${state.student.id}");
+                            print(state.student.id);
 
                             final studentModel = state.student;
 

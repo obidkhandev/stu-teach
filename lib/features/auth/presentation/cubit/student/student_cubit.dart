@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:stu_teach/core/error/failure.dart';
 import 'package:stu_teach/core/usecase/usecase.dart';
 import 'package:stu_teach/features/auth/data/models/student/stundent_model.dart';
@@ -59,7 +58,7 @@ class StudentCubit extends Cubit<StudentState> {
       emit(StudentSuccess(student));
     } catch (e) {
       print("Error Update Student $e");
-      emit(StudentFailure(ServerFailure(500)));
+      emit(const StudentFailure(ServerFailure(500)));
     }
   }
 }

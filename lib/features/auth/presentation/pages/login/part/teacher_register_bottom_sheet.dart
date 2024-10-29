@@ -14,7 +14,7 @@ teacherRegisterBottomSheet({required BuildContext context, required AuthCubit bl
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   return showModalBottomSheet(
     context: context,
@@ -32,7 +32,7 @@ teacherRegisterBottomSheet({required BuildContext context, required AuthCubit bl
         builder: (context, state) {
           return FadeInUp(
             child: Form(
-              key: _formKey, // Attach form key
+              key: formKey, // Attach form key
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 30),
                 child: Column(
@@ -78,7 +78,7 @@ teacherRegisterBottomSheet({required BuildContext context, required AuthCubit bl
                       text: "Register",
                       isLoading: state is AuthLoadingState,
                       onTap: () async {
-                        if (_formKey.currentState?.validate() ?? false) {
+                        if (formKey.currentState?.validate() ?? false) {
                        await  bloc.registerUser(
                              emailController.text,
                              passwordController.text,
